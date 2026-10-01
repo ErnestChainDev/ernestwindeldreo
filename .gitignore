@@ -17,7 +17,7 @@ dist-ssr
 .env.*
 !.env.example
 
-# Persistent visitor statistics belong to the running server, not source control.
+# The previous local stats database is retained as an ignored backup.
 data/
 
 # Editor directories and files

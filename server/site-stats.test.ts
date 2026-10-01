@@ -1,172 +1,90 @@
-﻿import assert from 'node:assert/strict';
-import { randomUUID } from 'node:crypto';
-import { rmSync } from 'node:fs';
-import { createServer } from 'node:http';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { test } from 'node:test';
-import { createSiteStats } from './site-stats.ts';
+﻿import assert from "node:assert/strict";
+import { randomUUID } from "node:crypto";
+import { createServer, type IncomingMessage } from "node:http";
+import { test } from "node:test";
+import { createSiteStats } from "./site-stats.ts";
+import type { StatsSnapshot, StatsStore } from "./supabase-stats.ts";
 
-type Snapshot = { views: number; likes: number; visitors: number; revision: number; liked: boolean };
-
-async function fixture(databasePath = ':memory:') {
-    const stats = createSiteStats(databasePath);
-    const server = createServer((request, response) => stats.handle(request, response, () => response.writeHead(404).end()));
-    await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve));
-    const address = server.address();
-    if (!address || typeof address === 'string') throw new Error('No test address');
-    const base = `http://127.0.0.1:${address.port}`;
-    let closed = false;
+function memoryStore(): StatsStore {
+    const visits = new Map<string, string>(); const likes = new Set<string>(); let revision = 0;
+    const snapshot = (id: string) => ({ views: visits.size, likes: likes.size, visitors: new Set(visits.values()).size, revision, liked: likes.has(id) });
     return {
-        base,
-        async close() {
-            if (closed) return;
-            closed = true;
-            stats.close();
-            server.closeAllConnections();
-            await new Promise<void>(resolve => server.close(() => resolve()));
-        },
+        snapshot: async id => snapshot(id),
+        visit: async (id, visit) => { if (!visits.has(visit)) { visits.set(visit, id); revision++; } return snapshot(id); },
+        like: async (id, liked) => { if (likes.has(id) !== liked) { if (liked) likes.add(id); else likes.delete(id); revision++; } return snapshot(id); },
     };
 }
-
-function client(base: string, initialCookie = '') {
+async function fixture(store = memoryStore(), parsed = false) {
+    const stats = createSiteStats({ store });
+    const server = createServer(async (request, response) => {
+        if (parsed && request.method === "POST") {
+            let raw = ""; for await (const chunk of request) raw += chunk.toString();
+            (request as IncomingMessage & { body?: unknown }).body = JSON.parse(raw);
+        }
+        await stats.handle(request, response, () => response.writeHead(404).end());
+    });
+    await new Promise<void>(resolve => server.listen(0, "127.0.0.1", resolve));
+    const address = server.address(); if (!address || typeof address === "string") throw new Error("No test address");
+    return { base: `http://127.0.0.1:${address.port}`, async close() { server.closeAllConnections(); await new Promise<void>(resolve => server.close(() => resolve())); } };
+}
+function client(base: string, initialCookie = "") {
     let cookie = initialCookie;
     return {
         get cookie() { return cookie; },
         async request(endpoint: string, body?: unknown) {
-            const response = await fetch(`${base}/api/site-stats${endpoint}`, {
-                method: body === undefined ? 'GET' : 'POST',
-                headers: { Cookie: cookie, ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
-                body: body === undefined ? undefined : JSON.stringify(body),
-            });
-            const setCookie = response.headers.get('set-cookie');
-            if (setCookie) cookie = setCookie.split(';')[0];
-            assert.equal(response.status, 200);
-            return await response.json() as Snapshot;
+            const response = await fetch(`${base}/api/site-stats${endpoint}`, { method: body === undefined ? "GET" : "POST", headers: { Cookie: cookie, ...(body === undefined ? {} : { "Content-Type": "application/json" }) }, body: body === undefined ? undefined : JSON.stringify(body) });
+            const setCookie = response.headers.get("set-cookie"); if (setCookie) cookie = setCookie.split(";")[0];
+            assert.equal(response.status, 200); assert.equal(response.headers.get("cache-control"), "no-store");
+            return await response.json() as StatsSnapshot;
         },
     };
 }
-
-async function stream(base: string, cookie: string) {
-    const controller = new AbortController();
-    const response = await fetch(`${base}/api/site-stats/events`, { headers: { Cookie: cookie }, signal: controller.signal });
-    assert.match(response.headers.get('content-type') || '', /text\/event-stream/);
-    const reader = response.body!.getReader();
-    const decoder = new TextDecoder();
-    let buffer = '';
-    return {
-        close() { controller.abort(); },
-        async next(): Promise<Snapshot> {
-            const timeout = setTimeout(() => controller.abort(), 4000);
-            try {
-                while (true) {
-                    let end: number;
-                    while ((end = buffer.indexOf('\n\n')) !== -1) {
-                        const event = buffer.slice(0, end);
-                        buffer = buffer.slice(end + 2);
-                        const line = event.split('\n').find(value => value.startsWith('data: '));
-                        if (line) return JSON.parse(line.slice(6)) as Snapshot;
-                    }
-                    const part = await reader.read();
-                    if (part.done) throw new Error('Event stream ended');
-                    buffer += decoder.decode(part.value, { stream: true });
-                }
-            } finally { clearTimeout(timeout); }
-        },
-    };
-}
-
-test('counts real visits once per tab session and counts separate visitors', async t => {
-    const app = await fixture();
-    t.after(() => app.close());
-    const first = client(app.base);
-    const visitId = randomUUID();
-    assert.equal((await first.request('/visit', { visitId })).views, 1);
+test("registers a tab once and keeps the anonymous visitor cookie", async t => {
+    const app = await fixture(); t.after(app.close); const first = client(app.base); const visitId = randomUUID();
+    assert.equal((await first.request("/visit", { visitId })).views, 1);
     assert.match(first.cookie, /^ewd_visitor=/);
-    await Promise.all(Array.from({ length: 8 }, () => first.request('/visit', { visitId })));
-    assert.equal((await first.request('')).views, 1);
-    const secondTab = await first.request('/visit', { visitId: randomUUID() });
-    assert.equal(secondTab.views, 2);
-    assert.equal(secondTab.visitors, 1);
-    const other = client(app.base);
-    const totals = await other.request('/visit', { visitId: randomUUID() });
-    assert.equal(totals.views, 3);
-    assert.equal(totals.visitors, 2);
+    await Promise.all(Array.from({ length: 8 }, () => first.request("/visit", { visitId })));
+    assert.equal((await first.request("")).views, 1);
+    assert.equal((await first.request("/visit", { visitId: randomUUID() })).visitors, 1);
+    const totals = await client(app.base).request("/visit", { visitId: randomUUID() });
+    assert.equal(totals.views, 3); assert.equal(totals.visitors, 2);
 });
-
-test('likes are idempotent per browser and can be removed without negative totals', async t => {
-    const app = await fixture();
-    t.after(() => app.close());
-    const first = client(app.base);
-    const second = client(app.base);
-    await first.request('/visit', { visitId: randomUUID() });
-    await second.request('/visit', { visitId: randomUUID() });
-    await Promise.all(Array.from({ length: 8 }, () => first.request('/like', { liked: true })));
-    assert.equal((await first.request('')).likes, 1);
-    assert.equal((await first.request('')).liked, true);
-    assert.equal((await second.request('')).liked, false);
-    assert.equal((await second.request('/like', { liked: true })).likes, 2);
-    await first.request('/like', { liked: false });
-    const counts = await first.request('/like', { liked: false });
-    assert.equal(counts.likes, 1);
-    assert.equal(counts.liked, false);
+test("like retries are idempotent and like state belongs to each cookie", async t => {
+    const app = await fixture(); t.after(app.close); const a = client(app.base), b = client(app.base);
+    await a.request("/visit", { visitId: randomUUID() }); await b.request("/visit", { visitId: randomUUID() });
+    await Promise.all(Array.from({ length: 8 }, () => a.request("/like", { liked: true })));
+    assert.equal((await a.request("")).likes, 1); assert.equal((await b.request("")).liked, false);
+    assert.equal((await b.request("/like", { liked: true })).likes, 2);
+    await a.request("/like", { liked: false }); const totals = await a.request("/like", { liked: false });
+    assert.equal(totals.likes, 1); assert.equal(totals.liked, false);
 });
-
-test('pushes updated totals and each browser\'s like state to live subscribers', async t => {
-    const app = await fixture();
-    t.after(() => app.close());
-    const first = client(app.base);
-    const second = client(app.base);
-    await first.request('/visit', { visitId: randomUUID() });
-    await second.request('/visit', { visitId: randomUUID() });
-    const a = await stream(app.base, first.cookie);
-    const b = await stream(app.base, second.cookie);
-    t.after(() => { a.close(); b.close(); });
-    assert.equal((await a.next()).views, 2);
-    assert.equal((await b.next()).likes, 0);
-    await first.request('/like', { liked: true });
-    const mine = await a.next();
-    const theirs = await b.next();
-    assert.equal(mine.likes, 1);
-    assert.equal(mine.liked, true);
-    assert.equal(theirs.likes, 1);
-    assert.equal(theirs.liked, false);
-    await second.request('/visit', { visitId: randomUUID() });
-    assert.equal((await a.next()).views, 3);
-    assert.equal((await b.next()).views, 3);
+test("separate server instances read shared stats without a process-local broadcaster", async t => {
+    const store = memoryStore(); const first = await fixture(store), second = await fixture(store); t.after(first.close); t.after(second.close);
+    const a = client(first.base); const visitId = randomUUID(); await a.request("/visit", { visitId });
+    const original = await a.request("/like", { liked: true });
+    assert.deepEqual(await client(second.base, a.cookie).request("/visit", { visitId }), original);
 });
-
-test('persists totals, deduplication, and likes after a server restart', async t => {
-    const databasePath = join(tmpdir(), `ewd-stats-test-${randomUUID()}.sqlite`);
-    const firstServer = await fixture(databasePath);
-    const visitor = client(firstServer.base);
-    const visitId = randomUUID();
-    await visitor.request('/visit', { visitId });
-    const original = await visitor.request('/like', { liked: true });
-    await firstServer.close();
-    const restarted = await fixture(databasePath);
-    t.after(async () => {
-        await restarted.close();
-        for (const suffix of ['', '-wal', '-shm']) rmSync(databasePath + suffix, { force: true });
-    });
-    const returning = client(restarted.base, visitor.cookie);
-    assert.deepEqual(await returning.request('/visit', { visitId }), original);
+test("accepts Vercel's parsed request body", async t => {
+    const app = await fixture(memoryStore(), true); t.after(app.close); const visitor = client(app.base);
+    assert.equal((await visitor.request("/visit", { visitId: randomUUID() })).views, 1);
+    assert.equal((await visitor.request("/like", { liked: true })).liked, true);
 });
-
-test('rejects malformed writes and cross-origin mutations without changing counts', async t => {
-    const app = await fixture();
-    t.after(() => app.close());
-    for (const [endpoint, body] of [['visit', { visitId: 'invalid' }], ['like', { liked: 'yes' }]]) {
-        const response = await fetch(`${app.base}/api/site-stats/${endpoint}`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
-        });
-        assert.equal(response.status, 400);
-    }
-    const crossOrigin = await fetch(`${app.base}/api/site-stats/like`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json', Origin: 'https://other.example' }, body: JSON.stringify({ liked: true }),
-    });
-    assert.equal(crossOrigin.status, 403);
-    const counts = await client(app.base).request('');
-    assert.equal(counts.views, 0);
-    assert.equal(counts.likes, 0);
+test("rejects invalid JSON, oversized bodies, methods and cross-site requests before database access", async t => {
+    let called = false; const fail = async () => { called = true; throw new Error("Must not reach database"); };
+    const app = await fixture({ snapshot: fail, visit: fail, like: fail }); t.after(app.close);
+    const post = (endpoint: string, body: string, headers = {}) => fetch(`${app.base}/api/site-stats/${endpoint}`, { method: "POST", headers: { "Content-Type": "application/json", ...headers }, body });
+    for (const [endpoint, body, status] of [["visit", '{"visitId":"invalid"}', 400], ["like", '{"liked":"yes"}', 400], ["like", "{bad", 400], ["like", "[]", 400], ["like", JSON.stringify({ liked: true, padding: "x".repeat(1100) }), 413]] as const) assert.equal((await post(endpoint, body)).status, status);
+    assert.equal((await post("like", '{"liked":true}', { Origin: "https://other.example" })).status, 403);
+    assert.equal((await post("like", '{"liked":true}', { Origin: "not-a-url" })).status, 403);
+    assert.equal((await post("like", '{"liked":true}', { "Sec-Fetch-Site": "cross-site" })).status, 403);
+    assert.equal((await fetch(`${app.base}/api/site-stats/like`)).status, 405);
+    assert.equal((await fetch(`${app.base}/api/site-stats/events`)).status, 404);
+    assert.equal((await fetch(`${app.base}/unrelated`)).status, 404);
+    assert.equal(called, false);
+});
+test("database errors produce retryable responses without credentials or SQL details", async t => {
+    const fail = async () => { throw new Error("private-db-password-and-query"); };
+    const app = await fixture({ snapshot: fail, visit: fail, like: fail }); t.after(app.close);
+    const response = await fetch(`${app.base}/api/site-stats`);
+    assert.equal(response.status, 503); assert.doesNotMatch(await response.text(), /private-db|password|query/);
 });

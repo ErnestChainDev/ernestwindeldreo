@@ -1,4 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { HttpError, readJsonBody } from "./http.ts";
 import { portfolioContext } from "./portfolio-context.ts";
 
 type Message = { role: "user" | "assistant"; content: string };
@@ -25,23 +26,12 @@ function json(response: ServerResponse, status: number, value: unknown) {
 }
 
 async function readMessages(request: IncomingMessage): Promise<Message[]> {
-    if (!request.headers["content-type"]?.toLowerCase().startsWith("application/json")) {
-        throw new RequestError(415, "Please send a JSON request.");
-    }
-    const chunks: Buffer[] = [];
-    let size = 0;
-    for await (const chunk of request.iterator({ destroyOnReturn: false })) {
-        const buffer = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
-        size += buffer.length;
-        if (size > 32_768) {
-            request.resume();
-            throw new RequestError(413, "This conversation is too long. Please start a new chat.");
-        }
-        chunks.push(buffer);
-    }
     let value: unknown;
-    try { value = JSON.parse(Buffer.concat(chunks).toString("utf8")); }
-    catch { throw new RequestError(400, "Invalid chat request."); }
+    try { value = await readJsonBody(request, 32_768); }
+    catch (error) {
+        if (error instanceof HttpError) throw new RequestError(error.status, error.status === 413 ? "This conversation is too long. Please start a new chat." : error.message);
+        throw error;
+    }
 
     if (!value || typeof value !== "object" || !("messages" in value) || !Array.isArray(value.messages)
         || value.messages.length < 1 || value.messages.length > 20) {
@@ -164,7 +154,7 @@ export function createPortfolioAI(options: Options = {}) {
     return {
         handle(request: IncomingMessage, response: ServerResponse, next: () => void) {
             if (request.url?.split("?")[0] !== "/api/portfolio-ai") { next(); return; }
-            void handle(request, response).catch(error => {
+            return handle(request, response).catch(error => {
                 json(response, error instanceof RequestError ? error.status : 500, {
                     error: error instanceof RequestError ? error.message : "The assistant is temporarily unavailable.",
                 });

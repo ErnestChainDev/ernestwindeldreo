@@ -1,4 +1,4 @@
-﻿export class WordScrambleAudio {
+export class WordScrambleAudio {
     private context: AudioContext | null = null;
     private master: GainNode | null = null;
     private enabled = true;

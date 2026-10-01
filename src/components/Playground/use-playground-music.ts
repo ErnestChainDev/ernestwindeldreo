@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { musicTracks } from "./music-tracks";
 
 const PREFERENCES_KEY = "ewd:playground-music";
@@ -37,6 +37,8 @@ export function usePlaygroundMusic() {
         }
         try { localStorage.setItem(PREFERENCES_KEY, JSON.stringify(next)); } catch { /* Music also works without storage. */ }
     }, []);
+
+    const invalidatePlayback = useCallback(() => { ++requestRef.current; pendingRef.current = false; }, []);
 
     const playTrack = useCallback(async (index: number) => {
         const audio = audioRef.current;
@@ -93,8 +95,7 @@ export function usePlaygroundMusic() {
         audio.addEventListener("error", error);
         audio.addEventListener("ended", ended);
         return () => {
-            ++requestRef.current;
-            pendingRef.current = false;
+            invalidatePlayback();
             syncEvents.forEach(event => audio.removeEventListener(event, sync));
             audio.removeEventListener("playing", playing);
             audio.removeEventListener("waiting", waiting);
@@ -105,7 +106,7 @@ export function usePlaygroundMusic() {
             audio.load();
             audioRef.current = null;
         };
-    }, [playTrack]);
+    }, [playTrack, invalidatePlayback]);
 
     function togglePlay() {
         const audio = audioRef.current;

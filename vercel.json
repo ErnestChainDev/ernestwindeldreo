@@ -1,0 +1,13 @@
+{
+    "framework": "vite",
+    "functions": {
+        "api/portfolio-ai.ts": { "maxDuration": 120 },
+        "api/site-stats.ts": { "maxDuration": 15 },
+        "api/site-stats/[action].ts": { "maxDuration": 15 }
+    },
+    "routes": [
+        { "handle": "filesystem" },
+        { "src": "/api(?:/.*)?", "status": 404 },
+        { "src": "/.*", "dest": "/index.html" }
+    ]
+}

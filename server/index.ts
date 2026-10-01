@@ -14,6 +14,7 @@ const dist = resolve("dist");
 const types: Record<string, string> = {
     ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8",
     ".css": "text/css; charset=utf-8", ".svg": "image/svg+xml", ".png": "image/png",
+    ".mp3": "audio/mpeg", ".ogg": "audio/ogg", ".wav": "audio/wav",
     ".woff2": "font/woff2", ".ttf": "font/ttf", ".otf": "font/otf", ".ico": "image/x-icon",
 };
 
@@ -54,7 +55,6 @@ server.listen(Number(process.env.PORT || 3000), process.env.HOST || "0.0.0.0", (
 });
 
 function close() {
-    stats.close();
     server.close();
 }
 process.once("SIGINT", close);

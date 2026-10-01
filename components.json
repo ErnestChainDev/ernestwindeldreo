@@ -24,6 +24,7 @@
   "registries": {
     "@react-bits": "https://reactbits.dev/r/{name}.json",
     "@animate-ui": "https://animate-ui.com/r/{name}.json",
-    "@ui": "https://ui.raulcarini.dev/r/{name}.json"
+    "@ui": "https://ui.raulcarini.dev/r/{name}.json",
+    "@supabase": "https://supabase.com/ui/r/{name}.json"
   }
 }

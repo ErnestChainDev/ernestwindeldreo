@@ -1,4 +1,4 @@
-﻿.playground-music { position: absolute; z-index: 10; top: clamp(20px, 3.6dvh, 36px); right: clamp(24px, 2.9vw, 58px); }
+.playground-music { position: absolute; z-index: 10; top: clamp(20px, 3.6dvh, 36px); right: clamp(24px, 2.9vw, 58px); }
 .playground-audio-actions { display: flex; justify-content: flex-end; gap: 12px; }
 .playground-audio-icon { position: relative; display: grid; place-items: center; width: 48px; height: 48px; padding: 12px; border: 1px solid #cbd0df; border-radius: 8px; background: #fcfcfdc9; color: #17191f; box-shadow: 0 1px 2px #24263504; }
 .playground-audio-icon:hover, .playground-audio-icon.is-open { background: #eceef4; border-color: #b7c0d7; }

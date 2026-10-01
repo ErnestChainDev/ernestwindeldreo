@@ -1,4 +1,4 @@
-﻿const sources = import.meta.glob<string>("./music/*.mp3", { eager: true, query: "?url", import: "default" });
+const sources = import.meta.glob<string>("./music/*.mp3", { eager: true, query: "?url", import: "default" });
 const catalog = [
     { match: "Sparkle", id: "sparkle", title: "Sparkle", artist: "Your Name · Soundtrack", artwork: "stars" },
     { match: "Zen Zen Zense", id: "zen-zen-zense", title: "Zen Zen Zense", artist: "RADWIMPS · Your Name", artwork: "waves" },

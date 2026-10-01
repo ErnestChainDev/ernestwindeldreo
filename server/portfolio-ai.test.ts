@@ -7,9 +7,15 @@ type Options = NonNullable<Parameters<typeof createPortfolioAI>[0]>;
 const question = { messages: [{ role: 'user', content: 'What projects has Ernest built?' }] };
 const completion = () => Response.json({ choices: [{ message: { content: 'Ernest built ContractLens and Learners-AI.' } }] });
 
-async function fixture(options: Options = {}) {
+async function fixture(options: Options = {}, parsed = false) {
     const assistant = createPortfolioAI({ apiKey: 'test-only-key', fetcher: async () => completion(), ...options });
-    const server = createServer((request, response) => assistant.handle(request, response, () => response.writeHead(404).end()));
+    const server = createServer(async (request, response) => {
+        if (parsed && request.method === 'POST') {
+            let text = ''; for await (const chunk of request) text += chunk.toString();
+            Object.assign(request, { body: JSON.parse(text) });
+        }
+        await assistant.handle(request, response, () => response.writeHead(404).end());
+    });
     await new Promise<void>(resolve => server.listen(0, '127.0.0.1', resolve));
     const address = server.address();
     if (!address || typeof address === 'string') throw new Error('Missing test address');
@@ -160,3 +166,10 @@ test('cancels the upstream request when the visitor stops or leaves', { timeout:
     await upstreamStopped;
 });
 
+
+test('handles Vercel-parsed chat bodies without needing any database connection', async t => {
+    const app = await fixture({}, true); t.after(app.close);
+    const response = await app.post();
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), { reply: 'Ernest built ContractLens and Learners-AI.' });
+});

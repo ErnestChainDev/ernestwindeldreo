@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useReducer, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState, type FormEvent } from "react";
 import { flushSync } from "react-dom";
 import { ArrowLeft, ArrowRight, Check, CornerDownLeft, Lightbulb, Pause, Play, RotateCcw, Shuffle, Volume2, VolumeX } from "lucide-react";
 import { navigateTo } from "../../../lib/navigation";

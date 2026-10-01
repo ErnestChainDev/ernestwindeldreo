@@ -1,4 +1,4 @@
-﻿export const ROUND_SECONDS = 30;
+export const ROUND_SECONDS = 30;
 export const ROUND_COUNT = 10;
 export type WordEntry = { word: string; hint: string; alternatives?: string[] };
 export const WORDS: WordEntry[] = [

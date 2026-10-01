@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, Mouse, Pause, Play, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import { navigateTo } from "../../../lib/navigation";
 import { createTower, dropBlock, resizeTower, startTower, stepTower, WORLD_HEIGHT, type TowerGame, type TowerPhase } from "./tower-stack-model";

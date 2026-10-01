@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Vite starts the frontend, stats API, and portfolio assistant API together. `npm run preview` also includes both APIs. Stats work without an external account; the assistant uses OpenRouter.
+Vite starts the frontend, stats API, and portfolio assistant API together. `npm run preview` also includes both APIs. Stats use Supabase; the assistant uses OpenRouter. Configure the server variables in `.env` before starting.
 
 ## Contact
 
@@ -38,31 +38,53 @@ OPENROUTER_API_KEY=your_openrouter_api_key
 OPENROUTER_MODEL=openai/gpt-6-sol-pro
 ```
 
-Restart the server after changing environment variables. Keep the key server-side: do not prefix it with `VITE_`. `.env` and `.env.local` are ignored by Git; `.env.example` contains no credentials. For deployment, set the same variables in the Node service environment. Existing process variables take precedence over local files.
+Restart the server after changing environment variables. Keep the key server-side: do not prefix it with `VITE_`. `.env` and `.env.local` are ignored by Git; `.env.example` contains no credentials. For deployment, set the same variables in the Vercel project environment. Existing process variables take precedence over local files.
 
-The browser posts to `/api/portfolio-ai`; the server sends requests to [OpenRouter's Chat Completions API](https://openrouter.ai/docs/quickstart) using the configured model. It provides the public facts in `server/portfolio-context.ts`, which should be updated alongside the portfolio. The assistant does not have access to private files or contact details beyond those facts. Requests have size, concurrency, rate, and timeout limits. Error messages do not expose upstream credentials. Behind a proxy, the rate limit conservatively shares the proxy's socket address; this implementation is designed for one Node service.
+The browser posts to `/api/portfolio-ai`; the server sends requests to [OpenRouter's Chat Completions API](https://openrouter.ai/docs/quickstart) using the configured model. It provides the public facts in `server/portfolio-context.ts`, which should be updated alongside the portfolio. The assistant does not have access to private files or contact details beyond those facts. Requests have size, concurrency, rate, and timeout limits. Error messages do not expose upstream credentials. Rate and concurrency limits use temporary memory within each function instance; they are not a distributed rate limiter. Chat messages and replies are never written to Supabase, files, or server logs.
 
 If the assistant is unavailable, verify the key, account credits, and model access in OpenRouter. The interface supports retrying without duplicating the question. No fallback model is selected automatically.
 
-## Production
+## Supabase setup and Vercel deployment
 
-```sh
-npm run build
-npm start
+The runtime uses Supabase's HTTPS Data API, so it needs no local database file or persistent server disk. Views and likes use database functions that commit each change atomically. Browser keys cannot access visitor records or modify these functions.
+
+Configure these **server-only** variables locally and in Vercel **Settings > Environment Variables** for the deployment environments you use:
+
+```dotenv
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SECRET_KEY=sb_secret_...
+OPENROUTER_API_KEY=your_openrouter_api_key
+OPENROUTER_MODEL=your_openrouter_model
 ```
 
-`npm start` serves `dist/`, the stats API, and the assistant API on port 3000. Set `PORT` and `HOST` if needed. Set `NODE_ENV=production` when serving the site over HTTPS to use secure visitor cookies.
+Do not give secret keys a `VITE_` prefix. `SUPABASE_PUBLISHABLE_KEY` and the `VITE_SUPABASE_*` values are optional public client settings; the engagement API itself only requires the server URL and secret key.
 
-Deploy this as **one running Node.js service with persistent storage**, not as a static-only upload. The database must survive deploys and restarts. Mount persistent storage and set `SITE_STATS_DB` to an absolute file path on that disk, for example `/data/site-stats.sqlite`. The default is `data/site-stats.sqlite`, ignored by Git. Back up this database along with its SQLite WAL if the server is running, or stop the server before copying the database.
+For a new Supabase project, set `DIRECT_URL` (or `DATABASE_URL`) to its PostgreSQL connection URL and run:
 
-The browser calls `/api/site-stats` on the same origin as the website. If using a reverse proxy, preserve the Host header, disable buffering for `/api/site-stats/events`, and allow long-lived event streams. A static-only service such as GitHub Pages cannot run this backend. Multiple server instances would need a shared database and a shared event broadcaster; this version intentionally uses one instance.
+```sh
+npm run db:setup
+```
+
+This applies the idempotent stats migration in `supabase/migrations/`. The supplied project has already been initialized. Database tooling verifies TLS with the public production CA certificates from the [official Supabase CLI source](https://github.com/supabase/cli/tree/main/apps/cli-go/internal/gen/types/templates). Direct PostgreSQL credentials are only used by setup, import, and database tests, not by the deployed API.
+
+The optional one-time importer preserves existing local views and likes:
+
+```sh
+npm run db:import-legacy
+```
+
+Only this importer reads the previous SQLite file. The running application uses Supabase exclusively. The original file is retained under the ignored `data/` directory.
+
+Deploy using Vercel's Vite preset, build command `npm run build`, output directory `dist`, and Node.js 24. `vercel.json` preserves API routes and provides the SPA fallback. The functions in `api/` serve stats and the stateless AI endpoint. After adding environment variables, redeploy so the functions receive them. AI conversations stay in browser memory while the chat page is open; each request forwards the bounded history to OpenRouter and returns a reply.
+
+For a normal Node host, `npm run build && npm start` still serves the website and both APIs. Set `PORT` and `HOST` if needed, and `NODE_ENV=production` when serving HTTPS so visitor cookies are secure.
 
 ## Count behavior
 
 - A view is one browser-tab visit, registered when the app opens (including the intro). Refreshing, React development remounts, and navigating back to Overview do not add another view in that tab session.
 - A new tab normally starts another visit. Browsers can copy session storage when duplicating a tab; those duplicated tabs share the original visit ID.
 - Likes are stored per anonymous browser cookie. The heart toggles like/unlike, and repeated requests do not create extra likes. The cookie lasts one year.
-- Counts are stored in SQLite and pushed to connected browsers using server-sent events. Event streams automatically reconnect after a temporary network interruption.
+- Counts are stored in Supabase and refreshed every 10 seconds while the tab is visible. Like changes update immediately. Reads resume when the tab becomes visible or the browser reconnects, and failures retry automatically. There are no long-lived event streams or process-local broadcasts.
 - The avatars use the installed Animate UI group and generic silhouettes for anonymous visitors. The number of avatars and the extra-visitor badge reflect recorded visitors; no profile photos or names are collected.
 - A different browser, cleared cookies, or private browsing represents a new anonymous visitor. These are anonymous engagement counters, not authenticated unique-person analytics or an abuse-proof voting system.
 - Failed connections show unavailable/retry UI rather than invented counts. The counters start from zero; previous screenshot numbers are not imported.
@@ -92,5 +114,9 @@ npm run test:ai
 npm run lint
 ```
 
-Backend tests cover visit deduplication, separate visitors, like/unlike behavior, concurrent repeated requests, live broadcasts, restart persistence, and invalid requests. Existing lint issues in the Animate UI tooltip/slot and shared button components are separate from the stats implementation.
+Backend tests cover visit deduplication, separate visitors, like/unlike behavior, shared server instances, Vercel-parsed bodies, and invalid requests. Run `npm run test:stats:db` with database credentials to verify live PostgreSQL transactions, concurrent RPC retries, persistence, RLS, and browser access restrictions. Temporary test records are removed afterward. Existing lint issues in the Animate UI tooltip/slot and shared button components are separate from the stats implementation.
 
+
+## Playground music
+
+The music icon opens a picker containing Sparkle, Zen Zen Zense, and Gurenge from `src/components/Playground/music/`. Select a track or use play/pause, previous/next, seek, and volume. The speaker icon toggles mute. Playback begins after a click, tracks advance automatically, and volume, mute, and track selection are remembered locally. Music stops when leaving Playground.

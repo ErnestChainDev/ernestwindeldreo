@@ -1,4 +1,4 @@
-﻿import { BASE_Y, BLOCK_HEIGHT, WORLD_HEIGHT, type Block, type TowerGame } from "./tower-stack-model";
+import { BASE_Y, BLOCK_HEIGHT, WORLD_HEIGHT, type Block, type TowerGame } from "./tower-stack-model";
 
 function drawBlock(context: CanvasRenderingContext2D, block: Block) {
     const gradient = context.createLinearGradient(block.x, block.y, block.x + block.width, block.y + BLOCK_HEIGHT);
