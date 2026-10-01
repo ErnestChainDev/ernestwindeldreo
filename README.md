@@ -77,6 +77,10 @@ Only this importer reads the previous SQLite file. The running application uses 
 
 Deploy using Vercel's Vite preset, build command `npm run build`, output directory `dist`, and Node.js 24. `vercel.json` preserves API routes and provides the SPA fallback. The functions in `api/` serve stats and the stateless AI endpoint. After adding environment variables, redeploy so the functions receive them. AI conversations stay in browser memory while the chat page is open; each request forwards the bounded history to OpenRouter and returns a reply.
 
+Select **Production** for all four server variables when deploying the public site; add **Preview** if preview deployments should use them too. Paste each value without the surrounding quotes from a dotenv file. No `ORIGIN`, `HOST`, or `PORT` variable is needed on Vercel: browser requests use `/api/` on the same website domain, and the server checks that origin automatically. Supabase Auth redirect URLs are not used by the anonymous views/likes API. `DIRECT_URL` and `DATABASE_URL` are only needed for the database tools.
+
+Deploy the repository root, including `api/`, `server/`, `tsconfig.json`, and `vercel.json`; uploading only `dist/` serves the frontend without the backend. The root TypeScript options explicitly configure Node and rewrite relative `.ts` imports to `.js` for compiled Vercel functions. Vercel does not use TypeScript project references to discover those options. The visit and like endpoints have explicit function files so they resolve before the API 404 fallback. A successful Vite build alone does not verify the function artifacts.
+
 For a normal Node host, `npm run build && npm start` still serves the website and both APIs. Set `PORT` and `HOST` if needed, and `NODE_ENV=production` when serving HTTPS so visitor cookies are secure.
 
 ## Count behavior
@@ -111,8 +115,11 @@ The included production server serves `index.html` for browser requests to clien
 npm run build
 npm run test:stats
 npm run test:ai
+npm run test:vercel
 npm run lint
 ```
+
+Run `npm run test:vercel` to emit the API functions using the root TypeScript options, load the compiled artifacts, and verify Vercel-parsed bodies and stateless AI requests with mocked providers. This check needs no credentials or paid AI calls.
 
 Backend tests cover visit deduplication, separate visitors, like/unlike behavior, shared server instances, Vercel-parsed bodies, and invalid requests. Run `npm run test:stats:db` with database credentials to verify live PostgreSQL transactions, concurrent RPC retries, persistence, RLS, and browser access restrictions. Temporary test records are removed afterward. Existing lint issues in the Animate UI tooltip/slot and shared button components are separate from the stats implementation.
 

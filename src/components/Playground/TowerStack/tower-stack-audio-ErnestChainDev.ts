@@ -1,4 +1,4 @@
-﻿type TowerCue = "start" | "drop" | "land" | "perfect" | "miss";
+type TowerCue = "start" | "drop" | "land" | "perfect" | "miss";
 
 export class TowerStackAudio {
     private context: AudioContext | null = null;

@@ -1,4 +1,4 @@
-﻿export const BLOCK_HEIGHT = 36;
+export const BLOCK_HEIGHT = 36;
 export const BASE_Y = 480;
 export const WORLD_HEIGHT = 540;
 export type TowerPhase = "ready" | "running" | "paused" | "over";

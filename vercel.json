@@ -3,7 +3,8 @@
     "functions": {
         "api/portfolio-ai.ts": { "maxDuration": 120 },
         "api/site-stats.ts": { "maxDuration": 15 },
-        "api/site-stats/[action].ts": { "maxDuration": 15 }
+        "api/site-stats/visit.ts": { "maxDuration": 15 },
+        "api/site-stats/like.ts": { "maxDuration": 15 }
     },
     "routes": [
         { "handle": "filesystem" },

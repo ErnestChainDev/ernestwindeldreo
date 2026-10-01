@@ -14,7 +14,8 @@
     "preview": "vite preview",
     "db:setup": "node scripts/setup-supabase.ts",
     "test:stats:db": "node --test server/supabase-stats.integration.test.ts",
-    "db:import-legacy": "node scripts/import-legacy-stats.ts"
+    "db:import-legacy": "node scripts/import-legacy-stats.ts",
+    "test:vercel": "node --test tests/vercel-functions.test.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

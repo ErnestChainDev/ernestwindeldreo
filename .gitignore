@@ -30,3 +30,6 @@ data/
 *.njsproj
 *.sln
 *.sw?
+
+# Vercel CLI and function build artifacts
+.vercel/
