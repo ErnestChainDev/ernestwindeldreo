@@ -1,0 +1,228 @@
+.portfolio-ai {
+    --ai-ink: #080d16;
+    --ai-text: #142454;
+    --ai-muted: #7b8bb8;
+    --ai-line: #bfcae2;
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    padding: 26px clamp(20px, 2.9vw, 56px) 30px;
+    overflow: hidden;
+    color: var(--ai-ink);
+}
+.portfolio-ai::before, .portfolio-ai::after {
+    position: absolute; z-index: -1;
+    background-image: radial-gradient(circle, #8fa3cf 1px, transparent 1.4px);
+    background-size: 24px 24px; opacity: 0.7; pointer-events: none; content: "";
+}
+.portfolio-ai::before { top: -12px; right: 0; width: 35%; height: 290px; mask-image: radial-gradient(ellipse, #000 12%, transparent 73%); }
+.portfolio-ai::after { bottom: -30px; left: -66px; width: 340px; height: 340px; mask-image: radial-gradient(ellipse, #000 12%, transparent 73%); }
+.portfolio-ai button { font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.portfolio-ai button:focus-visible, .portfolio-ai a:focus-visible { outline: 2px solid #6179ad; outline-offset: 4px; }
+.portfolio-ai button:disabled { cursor: not-allowed; }
+.portfolio-ai-topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.portfolio-ai-brand { display: flex; flex-wrap: wrap; gap: 8px; color: var(--ai-muted); font-size: 13px; font-weight: 550; letter-spacing: 0.12em; line-height: 1.5; text-transform: uppercase; }
+.portfolio-ai-brand span:first-child { color: #3e548b; }
+.portfolio-ai .portfolio-ai-back { display: inline-flex; align-items: center; flex-shrink: 0; gap: 10px; border: 0; background: transparent; color: #5e71a3; font-size: 16px; }
+.portfolio-ai-back kbd { padding: 6px 10px; border: 1px solid #aebfde; border-radius: 6px; font: inherit; color: #253e72; }
+.portfolio-ai-back:hover { color: var(--ai-ink); }
+.portfolio-ai-hero { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: 28px clamp(0px, 3.8vw, 64px) 0; }
+.portfolio-ai-hero h1 { font-size: clamp(36px, 3vw, 50px); font-weight: 700; line-height: 1.12; letter-spacing: -0.045em; outline: none; }
+.portfolio-ai .portfolio-ai-new-chat { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; min-height: 44px; padding: 6px 0 6px 10px; border: 0; background: transparent; color: #5e71a3; font-size: 16px; }
+.portfolio-ai-new-chat svg { width: 27px; height: 27px; stroke-width: 1.4; }
+.portfolio-ai-new-chat:hover { color: var(--ai-text); }
+.portfolio-ai-stage { min-width: 0; min-height: 0; margin-block: 22px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: #c4cde0 #e9edf4; scrollbar-gutter: stable both-edges; }
+.portfolio-ai-welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100%; max-width: 898px; margin-inline: auto; padding: 20px 4px 32px; text-align: center; }
+.portfolio-ai-avatar { display: block; flex-shrink: 0; width: 60px; height: 60px; border-radius: 50%; background: #e5e5e5; object-fit: cover; }
+.portfolio-ai-avatar--welcome { width: 160px; height: 160px; }
+.portfolio-ai .portfolio-ai-eyebrow { margin-top: 30px; color: var(--ai-muted); font-size: 14px; font-weight: 550; line-height: 1.5; letter-spacing: 0.15em; text-transform: uppercase; }
+.portfolio-ai-welcome h2 { margin-top: 12px; font-size: clamp(38px, 3.3vw, 54px); font-weight: 700; line-height: 1.15; letter-spacing: -0.04em; }
+.portfolio-ai .portfolio-ai-intro { margin-top: 10px; color: var(--ai-text); font-size: clamp(22px, 2vw, 32px); line-height: 1.3; letter-spacing: -0.035em; }
+.portfolio-ai .portfolio-ai-description { margin-top: 14px; color: var(--ai-muted); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.4; letter-spacing: -0.025em; }
+.portfolio-ai-suggestions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 28px; width: 100%; margin-top: 30px; }
+.portfolio-ai-suggestions button { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 68px; padding: 16px 28px; border: 1px solid var(--ai-line); border-radius: 12px; background: rgb(255 255 255 / 25%); color: var(--ai-text); font-size: clamp(15px, 1.25vw, 20px); line-height: 1.4; letter-spacing: -0.025em; text-align: left; transition: border-color 160ms ease, background-color 160ms ease; }
+.portfolio-ai-suggestions button:hover { border-color: #8ea3ca; background: #f0f3f9; }
+.portfolio-ai-suggestions svg { width: 23px; height: 23px; flex-shrink: 0; color: #304d86; stroke-width: 1.8; }
+.portfolio-ai-composer { width: 100%; max-width: 1036px; margin-inline: auto; }
+.portfolio-ai-composer form { display: flex; align-items: flex-end; gap: 16px; padding: 8px 12px 8px 22px; border: 1px solid var(--ai-line); border-radius: 12px; background: rgb(255 255 255 / 70%); }
+.portfolio-ai-composer form:focus-within { border-color: #8ea3ca; box-shadow: 0 0 0 2px rgb(116 134 170 / 7%); }
+.portfolio-ai-composer textarea { flex: 1; width: 100%; min-width: 0; min-height: 48px; max-height: 144px; resize: none; padding: 10px 0; border: 0; outline: none; background: transparent; color: var(--ai-text); font: inherit; font-size: 20px; line-height: 28px; letter-spacing: -0.025em; }
+.portfolio-ai-composer textarea::placeholder { color: var(--ai-muted); opacity: 1; }
+.portfolio-ai .portfolio-ai-send { display: grid; place-items: center; flex-shrink: 0; width: 56px; height: 48px; border: 0; border-radius: 9px; background: #060b10; color: #fff; }
+.portfolio-ai-send svg { width: 27px; height: 27px; stroke-width: 1.8; }
+.portfolio-ai-send:disabled { color: #dce2ee; }
+.portfolio-ai-send:hover:not(:disabled) { background: #253858; }
+.portfolio-ai-composer-notes { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; margin-top: 9px; color: var(--ai-muted); font-size: 13px; line-height: 1.4; }
+.portfolio-ai-composer-notes p:last-child { margin-left: auto; }
+.portfolio-ai-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.portfolio-ai--chat .portfolio-ai-stage { width: 100%; max-width: 1104px; margin: 24px auto 14px; }
+.portfolio-ai-conversation { padding: 0 26px 12px 10px; }
+.portfolio-ai-messages { display: flex; flex-direction: column; gap: 24px; }
+.portfolio-ai-message { min-width: 0; }
+.portfolio-ai-message--user { align-self: flex-end; max-width: 85%; padding: 16px 24px; border-radius: 13px; background: #ecf0f6; }
+.portfolio-ai-message--assistant { display: grid; grid-template-columns: 60px minmax(0, 1fr); align-items: start; gap: 20px; width: 100%; }
+.portfolio-ai-message--user + .portfolio-ai-message--assistant { margin-top: -24px; }
+.portfolio-ai-message-body { min-width: 0; padding-top: 12px; }
+.portfolio-ai .portfolio-ai-message-label { margin-bottom: 4px; color: var(--ai-muted); font-size: 16px; line-height: 1.4; }
+.portfolio-ai-message-content { color: var(--ai-text); font-size: 20px; line-height: 1.4; letter-spacing: -0.015em; overflow-wrap: anywhere; }
+.portfolio-ai-message--user .portfolio-ai-message-content { white-space: pre-wrap; }
+.portfolio-ai-message-content p { white-space: pre-wrap; }
+.portfolio-ai-message-content p + p { margin-top: 14px; }
+.portfolio-ai-message-content h3 { margin-top: 22px; margin-bottom: 3px; color: var(--ai-ink); font-size: 22px; font-weight: 700; line-height: 1.3; letter-spacing: -0.025em; }
+.portfolio-ai-message-content > :first-child { margin-top: 0; }
+.portfolio-ai-message-content strong { font-weight: 650; }
+.portfolio-ai-message-content .portfolio-ai-tools-line { margin-top: 6px; color: var(--ai-muted); font-size: 17px; }
+.portfolio-ai-message-content ul, .portfolio-ai-message-content ol { margin-block: 12px; padding-left: 24px; }
+.portfolio-ai-message-content ul { list-style-type: disc; }
+.portfolio-ai-message-content ol { list-style-type: decimal; }
+.portfolio-ai-message-content li + li { margin-top: 8px; }
+.portfolio-ai-message-content a { color: #627bb2; text-decoration: underline; text-underline-offset: 3px; }
+.portfolio-ai-message-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 22px; min-height: 36px; margin-top: 12px; color: #6c83b7; }
+.portfolio-ai-message-actions > a { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; }
+.portfolio-ai-message-actions > a span { text-decoration: underline; text-underline-offset: 3px; }
+.portfolio-ai-message-actions svg { width: 22px; height: 22px; stroke-width: 1.7; }
+.portfolio-ai .portfolio-ai-copy { display: grid; place-items: center; width: 36px; height: 36px; border: 0; border-radius: 6px; background: transparent; color: #8295bd; }
+.portfolio-ai-copy:hover { background: #edf1f8; color: #304d86; }
+.portfolio-ai-copy-error { color: #855365; font-size: 13px; }
+.portfolio-ai-thinking { display: flex; align-items: center; gap: 20px; padding-top: 24px; color: var(--ai-muted); font-size: 17px; }
+.portfolio-ai-thinking-dots { animation: portfolio-ai-pulse 1.2s ease-in-out infinite; }
+.portfolio-ai-error { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 22px; padding: 14px 16px; border: 1px solid #dccbd0; border-radius: 9px; color: #855365; font-size: 14px; }
+.portfolio-ai-error button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 36px; padding: 6px 10px; border: 1px solid var(--ai-line); border-radius: 7px; background: transparent; color: #4a5976; font-size: 13px; }
+.portfolio-ai-error button:hover { background: #edf0f5; }
+.portfolio-ai-error svg { width: 14px; height: 14px; }
+@keyframes portfolio-ai-pulse { 50% { opacity: 0.3; } }
+@media (max-width: 1100px) {
+    .portfolio-ai-hero { margin-inline: 0; }
+    .portfolio-ai-welcome { max-width: 790px; }
+    .portfolio-ai-suggestions { gap: 14px; }
+    .portfolio-ai-suggestions button { padding-inline: 20px; }
+    .portfolio-ai-message-content { font-size: 18px; }
+}
+@media (max-width: 900px) {
+    .portfolio-ai { padding: 20px 24px; }
+    .portfolio-ai-brand { font-size: 10px; gap: 6px; }
+    .portfolio-ai-hero { margin-top: 26px; }
+    .portfolio-ai-avatar--welcome { width: 130px; height: 130px; }
+    .portfolio-ai-composer textarea { font-size: 17px; }
+    .portfolio-ai-composer-notes { font-size: 11px; }
+    .portfolio-ai-conversation { padding-inline: 4px 12px; }
+    .portfolio-ai-message--assistant { grid-template-columns: 48px minmax(0, 1fr); gap: 14px; }
+    .portfolio-ai-message--assistant .portfolio-ai-avatar, .portfolio-ai-thinking .portfolio-ai-avatar { width: 48px; height: 48px; }
+    .portfolio-ai-message-body { padding-top: 4px; }
+}
+@media (max-width: 600px) {
+    .portfolio-ai { padding: 12px 20px max(14px, env(safe-area-inset-bottom)); }
+    .portfolio-ai-topbar { gap: 12px; }
+    .portfolio-ai-brand { max-width: 210px; font-size: 9px; gap: 2px 6px; }
+    .portfolio-ai .portfolio-ai-back { gap: 6px; min-height: 44px; font-size: 12px; }
+    .portfolio-ai-back kbd { padding: 4px 6px; }
+    .portfolio-ai-hero { margin-top: 20px; gap: 10px; }
+    .portfolio-ai-hero h1 { font-size: clamp(28px, 8vw, 38px); }
+    .portfolio-ai .portfolio-ai-new-chat { gap: 4px; padding-left: 0; font-size: 12px; }
+    .portfolio-ai-new-chat svg { width: 19px; height: 19px; }
+    .portfolio-ai-stage { margin-block: 18px; }
+    .portfolio-ai-welcome { padding: 14px 2px 24px; }
+    .portfolio-ai-avatar--welcome { width: 110px; height: 110px; }
+    .portfolio-ai .portfolio-ai-eyebrow { margin-top: 0; font-size: 10px; }
+    .portfolio-ai-welcome h2 { margin-top: 8px; font-size: 36px; }
+    .portfolio-ai .portfolio-ai-intro { margin-top: 0; max-width: 290px; font-size: 22px; }
+    .portfolio-ai .portfolio-ai-description { margin-top: 0; max-width: 290px; font-size: 14px; }
+    .portfolio-ai-suggestions { grid-template-columns: minmax(0, 1fr); gap: 9px; margin-top: 22px; }
+    .portfolio-ai-suggestions button { min-height: 54px; padding: 12px 14px; font-size: 14px; border-radius: 10px; }
+    .portfolio-ai-suggestions svg { width: 20px; height: 20px; }
+    .portfolio-ai-composer form { gap: 10px; padding: 7px 8px 7px 14px; }
+    .portfolio-ai-composer textarea { min-height: 44px; padding-block: 8px; font-size: 16px; }
+    .portfolio-ai .portfolio-ai-send { width: 44px; height: 44px; border-radius: 8px; }
+    .portfolio-ai-composer-notes { gap: 3px; font-size: 10px; }
+    .portfolio-ai-composer-notes p:last-child { margin-left: 0; }
+    .portfolio-ai--chat .portfolio-ai-stage { margin-block: 18px 12px; }
+    .portfolio-ai-conversation { padding-inline: 0 6px; }
+    .portfolio-ai-messages { gap: 22px; }
+    .portfolio-ai-message--user { max-width: 90%; padding: 12px 14px; border-radius: 11px; }
+    .portfolio-ai-message--assistant { grid-template-columns: 36px minmax(0, 1fr); gap: 10px; }
+    .portfolio-ai-message--user + .portfolio-ai-message--assistant { margin-top: -8px; }
+    .portfolio-ai-message--assistant .portfolio-ai-avatar, .portfolio-ai-thinking .portfolio-ai-avatar { width: 36px; height: 36px; }
+    .portfolio-ai-message-body { padding-top: 2px; }
+    .portfolio-ai .portfolio-ai-message-label { font-size: 13px; }
+    .portfolio-ai-message-content { font-size: 15px; line-height: 1.5; }
+    .portfolio-ai-message-content h3 { margin-top: 18px; font-size: 18px; }
+    .portfolio-ai-message-content .portfolio-ai-tools-line { font-size: 13px; }
+    .portfolio-ai-message-actions { gap: 8px; margin-top: 8px; }
+    .portfolio-ai-message-actions > a { gap: 6px; font-size: 13px; }
+    .portfolio-ai-message-actions svg { width: 19px; height: 19px; }
+    .portfolio-ai .portfolio-ai-copy { width: 44px; height: 44px; }
+    .portfolio-ai-thinking { gap: 10px; font-size: 14px; }
+}
+@media (max-height: 800px) and (min-width: 601px) {
+    .portfolio-ai { padding-block: 16px; }
+    .portfolio-ai-hero { margin-top: 16px; }
+    .portfolio-ai-hero h1 { font-size: 40px; }
+    .portfolio-ai-welcome { padding-block: 14px; }
+    .portfolio-ai-avatar--welcome { width: 112px; height: 112px; }
+    .portfolio-ai .portfolio-ai-eyebrow { margin-top: 18px; font-size: 12px; }
+    .portfolio-ai-welcome h2 { font-size: 40px; }
+    .portfolio-ai .portfolio-ai-intro { font-size: 26px; }
+    .portfolio-ai .portfolio-ai-description { margin-top: 8px; font-size: 17px; }
+    .portfolio-ai-suggestions { margin-top: 22px; }
+    .portfolio-ai-suggestions button { min-height: 58px; font-size: 16px; }
+}
+/* Fit the mobile welcome to the space above the composer; only chat scrolls. */
+@media (max-width: 600px), (max-width: 900px) and (max-height: 500px) {
+    .portfolio-ai:not(.portfolio-ai--chat) .portfolio-ai-stage {
+        container: ai-welcome / size;
+        overflow: clip;
+        scrollbar-gutter: auto;
+    }
+    .portfolio-ai-welcome { height: 100%; min-height: 0; padding-inline: 12px; }
+}
+@media (min-width: 601px) and (max-width: 900px) and (max-height: 500px) {
+    .portfolio-ai:not(.portfolio-ai--chat) { padding-block: 12px; }
+    .portfolio-ai:not(.portfolio-ai--chat) .portfolio-ai-hero { margin-top: 8px; }
+    .portfolio-ai:not(.portfolio-ai--chat) .portfolio-ai-hero h1 { font-size: 28px; }
+    .portfolio-ai:not(.portfolio-ai--chat) .portfolio-ai-stage { margin-block: 8px; }
+}
+@container ai-welcome (max-height: 550px) {
+    .portfolio-ai-welcome { padding-block: 8px; }
+    .portfolio-ai-avatar--welcome { width: 72px; height: 72px; }
+    .portfolio-ai .portfolio-ai-eyebrow { margin-top: 0; font-size: 10px; }
+    .portfolio-ai-welcome h2 { margin-top: 6px; font-size: 32px; }
+    .portfolio-ai .portfolio-ai-intro { margin-top: 0; font-size: 20px; }
+    .portfolio-ai .portfolio-ai-description { margin-top: 0; font-size: 13px; }
+    .portfolio-ai-suggestions { gap: 8px; margin-top: 18px; }
+    .portfolio-ai-suggestions button { min-height: 48px; padding-block: 10px; font-size: 13px; }
+}
+@container ai-welcome (max-height: 450px) {
+    .portfolio-ai-avatar--welcome { width: 48px; height: 48px; }
+    .portfolio-ai .portfolio-ai-eyebrow { font-size: 9px; }
+    .portfolio-ai-welcome h2 { font-size: 30px; }
+    .portfolio-ai .portfolio-ai-intro { font-size: 18px; }
+    .portfolio-ai .portfolio-ai-description { font-size: 12px; }
+    .portfolio-ai-suggestions { margin-top: 14px; }
+    .portfolio-ai-suggestions button { min-height: 44px; padding: 8px 10px; font-size: 13px; }
+}
+@container ai-welcome (max-height: 350px) or ((max-width: 300px) and (max-height: 410px)) {
+    .portfolio-ai-avatar--welcome { width: 40px; height: 40px; }
+    .portfolio-ai-welcome h2 { font-size: 26px; }
+    .portfolio-ai-suggestions { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 10px; }
+    .portfolio-ai-suggestions button { min-height: 48px; font-size: 12px; }
+    .portfolio-ai-suggestions svg { display: none; }
+}
+@container ai-welcome (max-height: 280px) {
+    .portfolio-ai-avatar--welcome, .portfolio-ai .portfolio-ai-eyebrow, .portfolio-ai .portfolio-ai-description { display: none; }
+    .portfolio-ai-welcome h2 { margin-top: 0; font-size: 26px; }
+    .portfolio-ai-suggestions { margin-top: 10px; }
+}
+@container ai-welcome (max-height: 230px) {
+    .portfolio-ai .portfolio-ai-intro { display: none; }
+    .portfolio-ai-welcome { padding-block: 4px; }
+    .portfolio-ai-welcome h2 { font-size: 24px; }
+    .portfolio-ai-suggestions button { min-height: 44px; padding-block: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .portfolio-ai-suggestions button { transition: none; }
+    .portfolio-ai-thinking-dots { animation: none; }
+}

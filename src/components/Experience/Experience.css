@@ -1,0 +1,210 @@
+.experience {
+    --experience-muted: #71798d;
+    --experience-line: #dfe1e7;
+    --experience-mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    position: relative;
+    isolation: isolate;
+    max-width: 1100px;
+    margin-inline: auto;
+    padding-top: 12px;
+    color: var(--experience-muted);
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.experience::before {
+    position: absolute;
+    z-index: -1;
+    top: -32px;
+    right: -12px;
+    width: min(280px, 55%);
+    height: 160px;
+    background-image: radial-gradient(circle, #b8bdc9 0.8px, transparent 1px);
+    background-size: 12px 12px;
+    mask-image: linear-gradient(225deg, #000, transparent 78%);
+    opacity: 0.7;
+    pointer-events: none;
+    content: "";
+}
+
+.experience-eyebrow,
+.experience-section-heading,
+.experience-period,
+.experience-context,
+.experience-tag-label {
+    font-family: var(--experience-mono);
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.experience-eyebrow {
+    font-size: 10px;
+    line-height: 1.2;
+    letter-spacing: 0.15em;
+}
+
+.experience-header h1 {
+    margin-top: 0;
+    color: var(--home-ink);
+    font-size: clamp(36px, 3.8vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -0.055em;
+}
+
+.experience-header h1 + p {
+    margin-top: 5px;
+    color: var(--experience-muted);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.experience-sections { margin-top: 24px; }
+.experience-section + .experience-section { margin-top: 10px; }
+
+.experience-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    color: #414b60;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.16em;
+}
+
+.experience-section-heading::after {
+    flex: 1;
+    height: 16px;
+    border-block: 1px solid var(--experience-line);
+    content: "";
+}
+
+.experience-entries {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.experience-entry {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    padding-block: 16px;
+}
+
+.experience-entry + .experience-entry { border-top: 1px solid var(--experience-line); }
+.experience-meta { padding-right: 16px; }
+
+.experience-number {
+    display: block;
+    margin-bottom: 10px;
+    color: #aaafba;
+    font-size: 44px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.045em;
+    font-variant-numeric: tabular-nums;
+}
+
+.experience-period,
+.experience-context {
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.035em;
+}
+
+.experience-details {
+    min-width: 0;
+    padding-left: 24px;
+    border-left: 1px solid var(--experience-line);
+    overflow-wrap: break-word;
+}
+
+.experience-details h3 {
+    color: var(--home-ink);
+    font-size: 20px;
+    font-weight: 650;
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+}
+
+.experience-details .experience-organization { margin-top: 3px; font-size: 14px; }
+.experience-details .experience-organization-detail { margin-top: 2px; }
+.experience-section--internships .experience-organization { font-family: var(--experience-mono); font-size: 13px; }
+
+.experience-highlights {
+    margin: 8px 0 0;
+    padding-left: 17px;
+    list-style: disc;
+}
+
+.experience-highlights li { padding-left: 1px; }
+.experience-highlights li::marker { color: #465065; }
+.experience-description { margin-top: 8px; }
+.experience-description p + p { margin-top: 3px; }
+.experience-toolkit { margin-top: 16px; }
+.experience-tag-label { font-size: 9px; line-height: 1.5; letter-spacing: 0.12em; }
+
+.experience-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 10px;
+    margin: 3px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.experience-tags li {
+    padding: 3px 12px;
+    border: 1px solid #d9dde5;
+    border-radius: 5px;
+    font-family: var(--experience-mono);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.experience-section--leadership .experience-entry { padding-block: 14px; }
+.experience-section--leadership h3,
+.experience-section--education h3 { font-size: 20px; }
+.experience-section--education .experience-toolkit { margin-top: 8px; }
+
+.experience-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 50px;
+    padding: 11px 16px;
+    border: 1px solid #d9dde5;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.experience-footer svg { width: 20px; height: 20px; flex-shrink: 0; stroke-width: 1.5; }
+.experience-footer p { padding-left: 16px; border-left: 1px solid #d9dde5; }
+
+@media (max-width: 1100px) {
+    .experience-entry { grid-template-columns: 128px minmax(0, 1fr); }
+}
+
+@media (max-width: 600px) {
+    .experience { padding-top: 0; font-size: 14px; line-height: 1.45; }
+    .experience-header h1 + p { max-width: 360px; font-size: 15px; }
+    .experience-sections { margin-top: 26px; }
+    .experience-section-heading { gap: 12px; font-size: 11px; letter-spacing: 0.12em; }
+    .experience-entry { grid-template-columns: 88px minmax(0, 1fr); padding-block: 20px; }
+    .experience-meta { padding-right: 10px; }
+    .experience-number { font-size: 38px; }
+    .experience-period, .experience-context { font-size: 10px; letter-spacing: 0; }
+    .experience-details { padding-left: 16px; }
+    .experience-details h3 { font-size: 19px; }
+    .experience-details .experience-organization { font-size: 14px; }
+    .experience-section--internships .experience-organization { font-size: 12px; }
+    .experience-tags { gap: 6px; }
+    .experience-tags li { padding: 4px 8px; font-size: 10px; }
+}
+
+@media (max-width: 480px) {
+    .experience-entry { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+    .experience-meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; padding-right: 0; }
+    .experience-number { margin-bottom: 0; font-size: 32px; }
+    .experience-details { padding-left: 14px; }
+}

@@ -1,0 +1,19 @@
+.home-logo-crop {
+    position: relative;
+    display: block;
+    flex-shrink: 0;
+    width: calc(5.9 * var(--home-unit));
+    overflow: hidden;
+    aspect-ratio: 1754 / 1320;
+}
+
+.home-logo-crop img {
+    position: absolute;
+    top: -31.667%;
+    left: -6.272%;
+    width: 114.026%;
+    max-width: none;
+    height: auto;
+    filter: grayscale(1) brightness(0.5);
+    user-select: none;
+}
