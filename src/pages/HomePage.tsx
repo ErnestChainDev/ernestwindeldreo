@@ -3,8 +3,8 @@ import { ArrowUpRight, Building2, Landmark, RotateCw, X } from "lucide-react";
 import OrbitalAvatar from "../components/OrbitalAvatar";
 import SocialIcon from "../components/Contact/SocialIcon";
 import { socialProfiles } from "../lib/social-profiles";
-import contractLens from "../assets/projects/contraclens.png";
-import learnersAi from "../assets/projects/learners-ai.png";
+import contractLens from "../assets/projects/contraclens.webp";
+import learnersAi from "../assets/projects/learners-ai.webp";
 import "./HomePage.css";
 
 const projects = [

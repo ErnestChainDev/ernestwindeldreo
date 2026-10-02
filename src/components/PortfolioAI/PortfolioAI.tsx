@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import { ArrowUp, ArrowUpRight, Plus, RotateCcw, Square } from "lucide-react";
-import erzaAvatar from "../../assets/avatargroup/avatar5.png";
+import erzaAvatar from "../../assets/avatargroup/avatar5.webp";
 import { navigateTo } from "../../lib/navigation";
 import AssistantReply from "./AssistantReply";
 import "./PortfolioAI.css";

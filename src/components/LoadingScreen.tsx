@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
-import logo from "../assets/Logo.png";
+import logo from "../assets/Logo.webp";
 import "./LoadingScreen.css";
 
 const DURATION = 1800;

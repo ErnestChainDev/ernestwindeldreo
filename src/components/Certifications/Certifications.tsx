@@ -1,17 +1,17 @@
 import { ArrowUpRight } from "lucide-react";
-import computerHardware from "../../assets/certificates/cisco/computer-hardware-basics.png";
-import operatingSystems from "../../assets/certificates/cisco/operating-system-basics.png";
-import endpointSecurity from "../../assets/certificates/cisco/endpoint-security.png";
-import backendDevelopment from "../../assets/certificates/coursera/developing-backend-appwith-nodejs&express.jpg";
-import softwareEngineer from "../../assets/certificates/internship/Software-Engineer-HTTPE.png";
-import promptEngineering from "../../assets/certificates/sololearn/Prompt Engineering.png";
-import introductionToLlms from "../../assets/certificates/sololearn/Introduction to LLMs.png";
-import webDevelopment from "../../assets/certificates/sololearn/Web Development.png";
-import javascriptIntermediate from "../../assets/certificates/sololearn/JavaScript Intermediate.png";
-import introductionToJavascript from "../../assets/certificates/sololearn/Intoduction to JavaScript.png";
-import introductionToPython from "../../assets/certificates/sololearn/Introduction to Python.png";
-import introductionToHtml from "../../assets/certificates/sololearn/Introduction to HTML.png";
-import introductionToCss from "../../assets/certificates/sololearn/Introduction to CSS.png";
+import computerHardware from "../../assets/certificates/cisco/computer-hardware-basics.webp";
+import operatingSystems from "../../assets/certificates/cisco/operating-system-basics.webp";
+import endpointSecurity from "../../assets/certificates/cisco/endpoint-security.webp";
+import backendDevelopment from "../../assets/certificates/coursera/developing-backend-appwith-nodejs&express.webp";
+import softwareEngineer from "../../assets/certificates/internship/Software-Engineer-HTTPE.webp";
+import promptEngineering from "../../assets/certificates/sololearn/Prompt Engineering.webp";
+import introductionToLlms from "../../assets/certificates/sololearn/Introduction to LLMs.webp";
+import webDevelopment from "../../assets/certificates/sololearn/Web Development.webp";
+import javascriptIntermediate from "../../assets/certificates/sololearn/JavaScript Intermediate.webp";
+import introductionToJavascript from "../../assets/certificates/sololearn/Intoduction to JavaScript.webp";
+import introductionToPython from "../../assets/certificates/sololearn/Introduction to Python.webp";
+import introductionToHtml from "../../assets/certificates/sololearn/Introduction to HTML.webp";
+import introductionToCss from "../../assets/certificates/sololearn/Introduction to CSS.webp";
 import "./Certifications.css";
 
 type Certificate = {

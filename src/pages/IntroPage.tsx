@@ -1,4 +1,5 @@
-import logo from "../assets/Logo.png";
+import logo from "../assets/Logo.webp";
+import logoSmall from "../assets/Logo-small.webp";
 import DotGrid from "../components/DotGrid";
 import "./IntroPage.css";
 
@@ -12,7 +13,7 @@ export default function IntroPage({ onEnter }: IntroPageProps) {
             <header className="intro-header">
                 <div className="intro-identity">
                     <span className="intro-logo-crop intro-header-logo">
-                        <img src={logo} alt="EWD logo" draggable={false} />
+                        <img src={logoSmall} srcSet={`${logoSmall} 512w, ${logo} 1200w`} sizes="96px" width={1200} height={1200} alt="EWD logo" draggable={false} />
                     </span>
                     <span className="intro-identity-divider" aria-hidden="true" />
                     <div className="intro-identity-copy">
@@ -79,7 +80,7 @@ export default function IntroPage({ onEnter }: IntroPageProps) {
                         <span className="intro-crosshair intro-crosshair-left" />
                     </div>
                     <span className="intro-logo-crop intro-hero-logo">
-                        <img src={logo} alt="" draggable={false} />
+                        <img src={logoSmall} srcSet={`${logoSmall} 512w, ${logo} 1200w`} sizes="(max-width: 900px) 220px, 480px" width={1200} height={1200} fetchPriority="high" alt="" draggable={false} />
                     </span>
                 </div>
             </section>

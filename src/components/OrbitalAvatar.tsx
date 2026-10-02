@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { avatarDirection, type AvatarDirection } from "../lib/avatar-direction";
-import front from "../assets/avatar-me/Refined monochrome developer portrait.png";
-import up from "../assets/avatar-me/Monochrome Portrait Gazing Upward-1.png";
-import left from "../assets/avatar-me/Monochrome Ernest avatar looking left-2.png";
-import right from "../assets/avatar-me/Ernest looking right-3.png";
-import down from "../assets/avatar-me/Monochrome suited avatar looking down.png";
-import topLeft from "../assets/avatar-me/Ernest avatar gazing top-left-5.png";
-import topRight from "../assets/avatar-me/Ernest’s top-right gaze-6.png";
-import bottomLeft from "../assets/avatar-me/Ernest’s bottom-left gaze avatar-7.png";
-import bottomRight from "../assets/avatar-me/Ernest’s bottom-right gaze-8.png";
+import front from "../assets/avatar-me/Refined monochrome developer portrait.webp";
+import up from "../assets/avatar-me/Monochrome Portrait Gazing Upward-1.webp";
+import left from "../assets/avatar-me/Monochrome Ernest avatar looking left-2.webp";
+import right from "../assets/avatar-me/Ernest looking right-3.webp";
+import down from "../assets/avatar-me/Monochrome suited avatar looking down.webp";
+import topLeft from "../assets/avatar-me/Ernest avatar gazing top-left-5.webp";
+import topRight from "../assets/avatar-me/Ernest’s top-right gaze-6.webp";
+import bottomLeft from "../assets/avatar-me/Ernest’s bottom-left gaze avatar-7.webp";
+import bottomRight from "../assets/avatar-me/Ernest’s bottom-right gaze-8.webp";
 
 const portraits: Record<AvatarDirection, string> = {
     front, up, left, right, down,

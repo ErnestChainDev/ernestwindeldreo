@@ -137,3 +137,13 @@ Backend tests cover visit deduplication, separate visitors, like/unlike behavior
 ## Playground music
 
 The music icon opens a picker containing Sparkle, Zen Zen Zense, and Gurenge from `src/components/Playground/music/`. Select a track or use play/pause, previous/next, seek, and volume. The speaker icon toggles mute. Playback begins after a click, tracks advance automatically, and volume, mute, and track selection are remembered locally. The same audio continues playing across portfolio pages and games until paused in the player.
+
+## Performance audits
+
+The first screen loads only its own JavaScript and CSS. Portfolio pages, games, the assistant, and the tour load when opened. Images use checked-in WebP variants; run `npm run optimize:images` after replacing an original image. The intro uses CSS dots until mouse interaction, and its canvas stops drawing when settled or hidden.
+
+Run `npm run build`, then `npm run audit:performance`. Install the test browser first with `PLAYWRIGHT_BROWSERS_PATH=./node_modules/.cache/playwright npx playwright install chromium` (in PowerShell, set `$env:PLAYWRIGHT_BROWSERS_PATH` before running `npx.cmd playwright install chromium`). The audit starts a production static server, uses fixture engagement counts without credentials or database writes, and saves mobile and desktop Lighthouse HTML/JSON reports under `artifacts/pagespeed/`. It fails if any scored category is below 90. To audit a deployed version, run `npm run audit:performance -- https://ernestwindeldreo.vercel.app/ live`. Local scores do not replace a PageSpeed Insights test of the deployed URL.
+
+For browser navigation checks, run `node scripts/serve-audit.mjs` in one terminal and `node scripts/check-frontend.mjs` in another. The checks cover entering the portfolio, the tour, deferred chunks, lazy page focus, browser Back, and all main pages on mobile and desktop.
+
+`robots.txt` and `llms.txt` are served as static text. Missing static files and discovery endpoints return 404 rather than the SPA HTML, while portfolio routes retain the SPA fallback. Hashed `/assets/` files can be cached for one year; each new build changes their filenames.

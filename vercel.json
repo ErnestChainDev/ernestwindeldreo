@@ -7,8 +7,10 @@
         "api/site-stats/like.ts": { "maxDuration": 15 }
     },
     "routes": [
+        { "src": "/assets/(.*)", "headers": { "Cache-Control": "public, max-age=31536000, immutable" }, "continue": true },
         { "handle": "filesystem" },
         { "src": "/api(?:/.*)?", "status": 404 },
+        { "src": "/(?:\\.well-known(?:/.*)?|.*\\.(?:txt|json|xml|js|css|map|png|jpg|jpeg|webp|svg|woff2?|ttf|otf))", "status": 404 },
         { "src": "/.*", "dest": "/index.html" }
     ]
 }

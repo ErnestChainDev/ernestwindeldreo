@@ -1,4 +1,4 @@
-import logo from "../assets/Logo.png";
+import logo from "../assets/Logo.webp";
 import "./BrandMark.css";
 
 export default function BrandMark({ className = "" }: { className?: string }) {

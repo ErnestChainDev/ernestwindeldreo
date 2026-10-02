@@ -1,0 +1,18 @@
+# Ernest Windel Dreo
+
+> Personal portfolio of Ernest Windel Dreo, a software engineer in the Philippines working on full-stack development, AI, and web design.
+
+## Portfolio
+
+- [Overview](https://ernestwindeldreo.vercel.app/): Introduction, selected work, toolkit, and social profiles.
+- [Projects](https://ernestwindeldreo.vercel.app/projects): Software, AI, and Web3 projects.
+- [Experience](https://ernestwindeldreo.vercel.app/experience): Professional experience.
+- [Stack](https://ernestwindeldreo.vercel.app/stack): Languages, frameworks, and tools.
+- [Certifications](https://ernestwindeldreo.vercel.app/certifications): Courses and certificates.
+- [Contact](https://ernestwindeldreo.vercel.app/contact): Public contact information and email draft form.
+- [Playground](https://ernestwindeldreo.vercel.app/playground): Interactive browser games.
+
+## Interactive features
+
+- [Typing test](https://ernestwindeldreo.vercel.app/typing-test): English and Filipino typing practice.
+- [Erza](https://ernestwindeldreo.vercel.app/ask): Portfolio assistant. Responses are generated and should be checked against the portfolio's published information.

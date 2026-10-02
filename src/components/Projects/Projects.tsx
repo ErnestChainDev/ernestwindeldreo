@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { ArrowRight, ExternalLink } from "lucide-react";
-import contractLens from "../../assets/projects/contraclens.png";
-import learnersAi from "../../assets/projects/learners-ai.png";
-import truthFinder from "../../assets/projects/truthfinder.png";
-import codeVerse from "../../assets/projects/codeverse.png";
-import christmasTree from "../../assets/projects/christmas-tree.png";
-import profileViews from "../../assets/projects/profileviews.png";
+import contractLens from "../../assets/projects/contraclens.webp";
+import learnersAi from "../../assets/projects/learners-ai.webp";
+import truthFinder from "../../assets/projects/truthfinder.webp";
+import codeVerse from "../../assets/projects/codeverse.webp";
+import christmasTree from "../../assets/projects/christmas-tree.webp";
+import profileViews from "../../assets/projects/profileviews.webp";
 import "./Projects.css";
 
 const filters = ["All projects", "Web apps", "AI & ML", "Web3"] as const;

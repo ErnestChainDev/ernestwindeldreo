@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+artifacts/
 *.local
 
 # API keys stay on the server and out of source control.

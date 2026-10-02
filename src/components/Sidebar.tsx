@@ -6,12 +6,12 @@ import ArrowNarrowRightIcon from "./ui/arrow-narrow-right-icon";
 import { AvatarGroup } from "./animate-ui/components/animate/avatar-group";
 import type { SiteStats } from "../hooks/useSiteStats";
 import { navigateTo, usePathname } from "../lib/navigation";
-import avatar1 from "../assets/avatargroup/avatar1.png";
-import avatar2 from "../assets/avatargroup/avatar2.png";
-import avatar3 from "../assets/avatargroup/avatar3.png";
-import avatar4 from "../assets/avatargroup/avatar4.png";
-import avatar5 from "../assets/avatargroup/avatar5.png";
-import avatar6 from "../assets/avatargroup/avatar6.png";
+import avatar1 from "../assets/avatargroup/avatar1.webp";
+import avatar2 from "../assets/avatargroup/avatar2.webp";
+import avatar3 from "../assets/avatargroup/avatar3.webp";
+import avatar4 from "../assets/avatargroup/avatar4.webp";
+import avatar5 from "../assets/avatargroup/avatar5.webp";
+import avatar6 from "../assets/avatargroup/avatar6.webp";
 import "./Sidebar.css";
 
 const navigation = [
