@@ -238,9 +238,20 @@ function TooltipOverlay() {
     useGlobalTooltip();
 
   const [rendered, setRendered] = React.useState<{
+    source: TooltipData | null;
     data: TooltipData | null;
     open: boolean;
-  }>({ data: null, open: false });
+  }>({ source: currentTooltip, data: currentTooltip, open: currentTooltip !== null });
+
+  // Retain the closing tooltip until its animation completes, and synchronize
+  // a new tooltip before committing children instead of scheduling an effect.
+  if (rendered.source !== currentTooltip) {
+    setRendered({
+      source: currentTooltip,
+      data: currentTooltip ?? rendered.data,
+      open: currentTooltip !== null,
+    });
+  }
 
   const arrowRef = React.useRef<SVGSVGElement | null>(null);
 
@@ -257,17 +268,9 @@ function TooltipOverlay() {
       }),
       flip(),
       shift({ padding: 8 }),
-      floatingArrow({ element: arrowRef }),
+      floatingArrow(() => ({ element: arrowRef.current })),
     ],
   });
-
-  React.useEffect(() => {
-    if (currentTooltip) {
-      setRendered({ data: currentTooltip, open: true });
-    } else {
-      setRendered((p) => (p.data ? { ...p, open: false } : p));
-    }
-  }, [currentTooltip]);
 
   React.useLayoutEffect(() => {
     if (referenceElRef.current) {
@@ -333,7 +336,7 @@ function TooltipOverlay() {
                   }}
                   onAnimationComplete={() => {
                     if (!rendered.open)
-                      setRendered({ data: null, open: false });
+                      setRendered(previous => previous.open ? previous : { ...previous, data: null });
                   }}
                   transition={transition}
                   {...rendered.data.contentProps}
@@ -559,8 +562,6 @@ export {
   TooltipContent,
   TooltipTrigger,
   TooltipArrow,
-  useGlobalTooltip,
-  useTooltip,
   type TooltipProviderProps,
   type TooltipProps,
   type TooltipContentProps,
