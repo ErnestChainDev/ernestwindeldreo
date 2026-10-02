@@ -15,9 +15,7 @@ type WithAsChild<Base extends object> =
   | (Base & { asChild: true; children: React.ReactElement })
   | (Base & { asChild?: false | undefined });
 
-type SlotProps<T extends HTMLElement = HTMLElement> = {
-  children?: React.ReactNode;
-} & DOMMotionProps<T>;
+type SlotProps<T extends HTMLElement = HTMLElement> = DOMMotionProps<T>;
 
 // Reuse the wrapper across Slot instances and renders so child state survives.
 const motionComponents = new Map<React.ElementType, React.ElementType>();
@@ -84,6 +82,7 @@ function Slot<T extends HTMLElement = HTMLElement>({
   const mergedProps = mergeProps(childProps, props);
 
   return (
+    // eslint-disable-next-line react-hooks/static-components -- The module cache preserves component identity for each child type.
     <Base {...mergedProps} ref={mergeRefs(childRef as React.Ref<T>, ref)} />
   );
 }

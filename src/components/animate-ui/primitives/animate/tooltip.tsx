@@ -185,6 +185,7 @@ const [RenderedTooltipProvider, useRenderedTooltip] =
 type FloatingContextType = {
   context: UseFloatingReturn['context'];
   arrowRef: React.RefObject<SVGSVGElement | null>;
+  setArrowRef: React.RefCallback<SVGSVGElement>;
 };
 
 const [FloatingProvider, useFloatingContext] =
@@ -205,7 +206,7 @@ function TooltipArrow({
   ...props
 }: TooltipArrowProps) {
   const { side, align, open } = useRenderedTooltip();
-  const { context, arrowRef } = useFloatingContext();
+  const { context, arrowRef, setArrowRef } = useFloatingContext();
   const { transition, globalId } = useGlobalTooltip();
   React.useImperativeHandle(ref, () => arrowRef.current as SVGSVGElement);
 
@@ -213,7 +214,7 @@ function TooltipArrow({
 
   return (
     <MotionTooltipArrow
-      ref={arrowRef}
+      ref={setArrowRef}
       context={context}
       data-state={open ? 'open' : 'closed'}
       data-side={side}
@@ -254,11 +255,16 @@ function TooltipOverlay() {
   }
 
   const arrowRef = React.useRef<SVGSVGElement | null>(null);
+  const [arrowElement, setArrowElement] = React.useState<SVGSVGElement | null>(null);
+  const setArrowRef = React.useCallback((element: SVGSVGElement | null) => {
+    arrowRef.current = element;
+    setArrowElement(element);
+  }, []);
 
   const side = rendered.data?.side ?? 'top';
   const align = rendered.data?.align ?? 'center';
 
-  const { refs, x, y, strategy, context, update } = useFloating({
+  const { refs: { setReference, setFloating }, x, y, strategy, context, update } = useFloating({
     placement: align === 'center' ? side : `${side}-${align}`,
     whileElementsMounted: autoUpdate,
     middleware: [
@@ -268,16 +274,16 @@ function TooltipOverlay() {
       }),
       flip(),
       shift({ padding: 8 }),
-      floatingArrow(() => ({ element: arrowRef.current })),
+      floatingArrow({ element: arrowElement }),
     ],
   });
 
   React.useLayoutEffect(() => {
     if (referenceElRef.current) {
-      refs.setReference(referenceElRef.current);
+      setReference(referenceElRef.current);
       update();
     }
-  }, [referenceElRef, refs, update, rendered.data]);
+  }, [referenceElRef, setReference, update, rendered.data]);
 
   const ready = x != null && y != null;
   const Component = rendered.data?.contentAsChild ? Slot : motion.div;
@@ -288,7 +294,7 @@ function TooltipOverlay() {
       {rendered.data && ready && (
         <TooltipPortal>
           <div
-            ref={refs.setFloating}
+            ref={setFloating}
             data-slot="tooltip-overlay"
             data-side={resolvedSide}
             data-align={rendered.data.align}
@@ -301,7 +307,7 @@ function TooltipOverlay() {
               transform: `translate3d(${x!}px, ${y!}px, 0)`,
             }}
           >
-            <FloatingProvider value={{ context, arrowRef }}>
+            <FloatingProvider value={{ context, arrowRef, setArrowRef }}>
               <RenderedTooltipProvider
                 value={{
                   side: resolvedSide,
