@@ -39,14 +39,25 @@ export default function OrbitalAvatar() {
         };
         const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
         const move = (event: PointerEvent) => {
-            pointer = event.pointerType === "touch" ? null : { x: event.clientX, y: event.clientY };
+            if (!event.isPrimary) return;
+            pointer = { x: event.clientX, y: event.clientY };
+            schedule();
+        };
+        const touch = (event: TouchEvent) => {
+            const contact = event.touches[0];
+            if (!contact) return;
+            pointer = { x: contact.clientX, y: contact.clientY };
             schedule();
         };
         const tourPointer = (event: Event) => { pointer = (event as CustomEvent<{ x: number; y: number }>).detail; schedule(); };
         const reset = () => { pointer = null; schedule(); };
-        const leave = (event: PointerEvent) => { if (!event.relatedTarget) reset(); };
+        // Keep a tap's gaze after the finger lifts, rather than immediately resetting.
+        const leave = (event: PointerEvent) => { if (event.pointerType !== "touch" && !event.relatedTarget) reset(); };
 
         window.addEventListener("pointermove", move, { passive: true });
+        window.addEventListener("touchstart", touch, { passive: true });
+        // Touch events continue during native scrolling after pointer cancellation.
+        window.addEventListener("touchmove", touch, { passive: true });
         window.addEventListener("portfolio:tour-pointer", tourPointer);
         window.addEventListener("pointerout", leave);
         window.addEventListener("blur", reset);
@@ -55,6 +66,8 @@ export default function OrbitalAvatar() {
         return () => {
             cancelAnimationFrame(frame);
             window.removeEventListener("pointermove", move);
+            window.removeEventListener("touchstart", touch);
+            window.removeEventListener("touchmove", touch);
             window.removeEventListener("portfolio:tour-pointer", tourPointer);
             window.removeEventListener("pointerout", leave);
             window.removeEventListener("blur", reset);
