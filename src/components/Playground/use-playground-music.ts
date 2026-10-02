@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { musicTracks } from "./music-tracks";
 
 const PREFERENCES_KEY = "ewd:playground-music";
@@ -18,7 +18,16 @@ function readPreferences(): Preferences {
     } catch { return defaults; }
 }
 
+export const PlaygroundMusicContext = createContext<ReturnType<typeof useMusicPlayer> | null>(null);
+
 export function usePlaygroundMusic() {
+    const player = useContext(PlaygroundMusicContext);
+    if (!player) throw new Error("Playground music requires PlaygroundMusicProvider.");
+    return player;
+}
+
+// The provider owns the audio element across page and game navigation.
+export function useMusicPlayer() {
     const [preferences, setPreferences] = useState(readPreferences);
     const [playback, setPlayback] = useState<Playback>(() => ({ index: Math.max(0, musicTracks.findIndex(track => track.id === preferences.trackId)), playing: false, loading: false, time: 0, duration: 0, error: "" }));
     const audioRef = useRef<HTMLAudioElement | null>(null);

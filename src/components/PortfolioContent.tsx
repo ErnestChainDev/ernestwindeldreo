@@ -30,7 +30,7 @@ const pages = {
     playground: Playground,
 };
 
-function PortfolioContent() {
+function PortfolioContent({ tourActive, hasToured, onStartTour }: { tourActive: boolean; hasToured: boolean; onStartTour: () => void }) {
     const pathname = usePathname();
     const gamePath = pathname.replace(/\/$/, "");
     const GameContent = Object.hasOwn(gamePages, gamePath) ? gamePages[gamePath as keyof typeof gamePages] : undefined;
@@ -48,7 +48,7 @@ function PortfolioContent() {
 
     return (
         <div key={pathname} className="portfolio-content" ref={contentRef}>
-            {GameContent ? <GameContent /> : section === "ask" ? <PortfolioAI /> : section === "typing-test" ? <TypingTest /> : !section ? <HomePage /> : (
+            {GameContent ? <GameContent /> : section === "ask" ? <PortfolioAI /> : section === "typing-test" ? <TypingTest /> : !section ? <HomePage tourActive={tourActive} hasToured={hasToured} onStartTour={onStartTour} /> : (
                 <main className={`portfolio-page${section === "contact" ? " contact-page" : section === "playground" ? " playground-page" : ""}`}>
                     {PageContent ? <PageContent /> : (
                         <div className="portfolio-unavailable">

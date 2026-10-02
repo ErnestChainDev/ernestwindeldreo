@@ -135,7 +135,7 @@ export default function Sidebar({ stats, variant = "desktop", onClose }: Sidebar
 
     const playgroundLink = (
         <a
-            href="/playground" className={`home-nav-link home-playground${activePage === "/playground" ? " is-active" : ""}`}
+            href="/playground" data-tour="nav-playground" className={`home-nav-link home-playground${activePage === "/playground" ? " is-active" : ""}`}
             aria-current={activePage === "/playground" ? "page" : undefined} title="Playground"
         >
             <Gamepad2 aria-hidden="true" />
@@ -164,7 +164,7 @@ export default function Sidebar({ stats, variant = "desktop", onClose }: Sidebar
 
                         return (
                             <a
-                                key={href} href={href}
+                                key={href} href={href} data-tour={`nav-${href === "/" ? "overview" : href.slice(1)}`}
                                 className={`home-nav-link${active ? " is-active" : ""}`}
                                 aria-current={active ? "page" : undefined} title={label}
                             >
@@ -182,7 +182,7 @@ export default function Sidebar({ stats, variant = "desktop", onClose }: Sidebar
                 <div className="home-nav-tools">
                     {shortcuts.map(({ label, href, icon: Icon, key }) => (
                         <a
-                            key={href} href={href}
+                            key={href} href={href} data-tour={`nav-${href.slice(1)}`}
                             className={`home-nav-link home-tool-link${activePage === href ? " is-active" : ""}`}
                             aria-current={activePage === href ? "page" : undefined}
                             aria-keyshortcuts={`Alt+${key}`} title={`${label} (Alt + ${key})`}
@@ -198,10 +198,10 @@ export default function Sidebar({ stats, variant = "desktop", onClose }: Sidebar
 
             {mobile && playgroundLink}
 
-            <div className="home-community">
+            <div className="home-community" data-tour="community">
                 <CommunityAvatars />
                 <button
-                    type="button" className="home-like-button"
+                    type="button" className="home-like-button" data-tour="likes"
                     onClick={() => void toggleLike()} disabled={!connected || pending || !counts}
                     aria-pressed={counts?.liked ?? false}
                     aria-label={counts?.liked ? "Unlike this portfolio" : "Like this portfolio"}
@@ -210,7 +210,7 @@ export default function Sidebar({ stats, variant = "desktop", onClose }: Sidebar
                     <Heart aria-hidden="true" fill="currentColor" />
                     <span aria-live="polite" aria-atomic="true">{formatCount(counts?.likes)} {counts?.likes === 1 ? "like" : "likes"}</span>
                 </button>
-                <span className="home-view-count" aria-live="polite" aria-atomic="true" title="One view per browser-tab visit; refreshing does not add a view.">
+                <span className="home-view-count" data-tour="views" aria-live="polite" aria-atomic="true" title="One view per browser-tab visit; refreshing does not add a view.">
                     <strong>{formatCount(counts?.views)}</strong> people views
                 </span>
                 {error && <button className="home-stats-retry" type="button" onClick={retry} title={error}>Stats unavailable · Retry</button>}

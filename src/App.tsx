@@ -1,8 +1,10 @@
-﻿import { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import LoadingScreen from "./components/LoadingScreen";
 import IntroPage from "./pages/IntroPage";
 import PortfolioLayout from "./components/PortfolioLayout";
 import PortfolioContent from "./components/PortfolioContent";
+import PlaygroundMusicProvider from "./components/Playground/PlaygroundMusicProvider";
+import HomeTour from "./components/HomeTour";
 import { useSiteStats } from "./hooks/useSiteStats";
 import "./App.css";
 
@@ -23,6 +25,16 @@ function getInitialScreen(): Screen {
 export default function App() {
   const stats = useSiteStats();
   const [screen, setScreen] = useState<Screen>(getInitialScreen);
+  const [tourActive, setTourActive] = useState(false);
+  const [hasToured, setHasToured] = useState(false);
+  const handleStartTour = useCallback(() => setTourActive(true), []);
+  const handleCloseTour = useCallback(() => {
+    setTourActive(false);
+    setHasToured(true);
+    if (window.location.pathname === "/") {
+      requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(".home-tour-trigger")?.focus({ preventScroll: true }));
+    }
+  }, []);
 
   const handleEnter = useCallback(() => {
     setScreen("loading");
@@ -36,6 +48,7 @@ export default function App() {
       // Navigation still works if browser storage is blocked.
     }
 
+    setTourActive(window.location.pathname === "/");
     setScreen("home");
   }, []);
 
@@ -48,8 +61,11 @@ export default function App() {
   }
 
   return (
-    <PortfolioLayout stats={stats}>
-      <PortfolioContent />
-    </PortfolioLayout>
+    <PlaygroundMusicProvider>
+      <PortfolioLayout stats={stats}>
+        <PortfolioContent tourActive={tourActive} hasToured={hasToured} onStartTour={handleStartTour} />
+        {tourActive && <HomeTour onClose={handleCloseTour} />}
+      </PortfolioLayout>
+    </PlaygroundMusicProvider>
   );
 }

@@ -10,6 +10,12 @@ export default function MobileNavigation({ stats }: { stats: SiteStats }) {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
+        const tourMenu = (event: Event) => setOpen((event as CustomEvent<{ open: boolean }>).detail.open);
+        window.addEventListener("portfolio:tour-menu", tourMenu);
+        return () => window.removeEventListener("portfolio:tour-menu", tourMenu);
+    }, []);
+
+    useEffect(() => {
         if (!open) return;
 
         const dialog = dialogRef.current;

@@ -1,0 +1,43 @@
+.home-shell .home-nav-link[data-tour-current] { color: var(--home-ink); }
+.home-tour-overlay { position: fixed; z-index: 100; inset: 0; pointer-events: none; color: #fff; font-family: "Geist Variable", Arial, sans-serif; }
+.home-tour-overlay * { box-sizing: border-box; }
+.home-tour-highlight { position: fixed; pointer-events: none; }
+.home-tour-cursor { position: fixed; top: 0; left: 0; width: 26px; height: 30px; overflow: visible; filter: drop-shadow(0 3px 3px rgb(0 0 0 / 24%)); transition: transform 680ms cubic-bezier(.25, .75, .25, 1), opacity 120ms ease; }
+.home-tour-card { position: fixed; width: max-content; max-width: min(320px, calc(100vw - 32px)); max-height: calc(100dvh - 90px); padding: 10px 15px 13px; overflow: hidden; border: 1px solid #38383b; border-radius: 12px; background: linear-gradient(145deg, #19191a, #0e0e0f); box-shadow: 0 8px 22px rgb(0 0 0 / 18%), 0 2px 5px rgb(0 0 0 / 12%); transition: left 680ms cubic-bezier(.25, .75, .25, 1), top 680ms cubic-bezier(.25, .75, .25, 1), opacity 150ms ease; }
+.home-tour-card:not(.is-settled) { padding: 5px 8px; border-radius: 999px; }
+.home-tour-card:not(.is-settled) header { margin-bottom: 0; }
+.home-tour-card header { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 3px; color: #b1b1b5; font-size: 11px; line-height: 1.4; }
+.home-tour-card p { position: relative; margin: 0; color: #f7f7f8; font-size: 14px; line-height: 1.5; letter-spacing: -.015em; }
+.home-tour-message-reserve { display: block; visibility: hidden; }
+.home-tour-message-typed { position: absolute; inset: 0; }
+.home-tour-text-caret { display: inline-block; width: 1px; height: 1em; margin-left: 3px; background: #dcdcdf; vertical-align: -.12em; animation: home-tour-blink 700ms steps(2) infinite; }
+.home-tour-dock { position: fixed; right: 22px; bottom: max(18px, env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 4px; max-width: calc(100vw - 32px); padding: 5px; border: 1px solid #e3e2ea; border-radius: 999px; background: rgb(255 255 255 / 94%); color: #575361; box-shadow: 0 3px 16px rgb(32 28 48 / 7%); pointer-events: auto; }
+.home-tour-dock button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 32px; height: 32px; padding: 6px 8px; border: 0; border-radius: 999px; background: transparent; color: inherit; font: inherit; font-size: 11px; white-space: nowrap; cursor: pointer; }
+.home-tour-dock button:hover:not(:disabled) { background: #efedf5; color: #111; }
+.home-tour-dock button:focus-visible { outline: 2px solid #b9afcf; outline-offset: 2px; }
+.home-tour-dock button:disabled { opacity: .3; cursor: default; }
+.home-tour-dock svg { width: 15px; height: 15px; stroke-width: 1.7; }
+.home-tour-dock .home-tour-pause { padding-inline: 12px; }
+.home-tour-sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.portfolio-tour-active .home-sidebar-mobile { padding-bottom: 130px; scroll-padding-block: 88px 90px; }
+@media (min-width: 901px) and (max-width: 1000px) and (orientation: landscape) {
+    .portfolio-tour-active .home-shell:not(.home-shell--snake, .home-shell--assistant, .home-shell--space-dash, .home-shell--tower-stack, .home-shell--word-scramble, .home-shell--typing-test) { grid-template-columns: calc(18.35 * var(--home-unit)) minmax(0, 1fr); }
+    .portfolio-tour-active .home-sidebar { align-items: stretch; padding-inline: 14px; padding-bottom: 110px; overflow-y: auto; scroll-padding-bottom: 90px; }
+    .portfolio-tour-active .home-sidebar .home-brand-copy { display: block; }
+    .portfolio-tour-active .home-sidebar .home-community { display: grid; }
+    .portfolio-tour-active .home-sidebar .home-sidebar-footer { display: flex; }
+    .portfolio-tour-active .home-sidebar .home-nav-link > span { display: block; }
+    .portfolio-tour-active .home-sidebar .home-nav-link > .home-shortcut { display: inline-flex; }
+    .portfolio-tour-active .home-sidebar .home-nav-link { justify-content: flex-start; }
+}
+@keyframes home-tour-blink { 50% { opacity: 0; } }
+@media (max-width: 900px) {
+    .home-tour-card { max-width: min(290px, calc(100vw - 32px)); }
+    .home-tour-card p { font-size: 13px; }
+    .home-tour-dock { right: 50%; transform: translateX(50%); }
+    .home-tour-dock button { min-width: 38px; height: 38px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .home-tour-cursor, .home-tour-card { transition: none; }
+    .home-tour-text-caret { animation: none; }
+}

@@ -1,20 +1,11 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowUpRight, Check, Copy } from "lucide-react";
-import SocialIcon, { type SocialBrand } from "./SocialIcon";
+import SocialIcon from "./SocialIcon";
+import { socialProfiles } from "../../lib/social-profiles";
 import "./Contact.css";
 
 const email = "ernestchaindev@gmail.com";
 const topics = ["Project inquiry", "Job opportunity", "Just saying hi"] as const;
-
-// Add verified profile URLs here; missing profiles never link to guessed accounts.
-const socials: { name: string; brand: SocialBrand; href?: string }[] = [
-    { name: "GitHub", brand: "github", href: "https://github.com/ErnestChainDev" },
-    { name: "LinkedIn", brand: "linkedin", href: "https://www.linkedin.com/in/ernestwindeldreo/" },
-    { name: "Facebook", brand: "facebook", href: "https://web.facebook.com/ernestwindel.odre/" },
-    { name: "Instagram", brand: "instagram", href: "https://www.instagram.com/its_me.ernessttt" },
-    { name: "X", brand: "x", href: "https://x.com/SolMoonWhales" },
-    { name: "TikTok", brand: "tiktok", href: "https://www.tiktok.com/@qinwynnn" },
-];
 
 export default function Contact() {
     const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
@@ -77,7 +68,7 @@ export default function Contact() {
                 <nav className="contact-online" aria-labelledby="contact-social-heading">
                     <h2 className="contact-eyebrow" id="contact-social-heading">Find me online</h2>
                     <ul className="contact-socials">
-                        {socials.map(social => (
+                        {socialProfiles.map(social => (
                             <li key={social.brand}>
                                 <a
                                     className={`contact-social contact-social--${social.brand}`}

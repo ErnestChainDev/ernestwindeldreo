@@ -13,11 +13,21 @@ npm run dev
 
 Vite starts the frontend, stats API, and portfolio assistant API together. `npm run preview` also includes both APIs. Stats use Supabase; the assistant uses OpenRouter. Configure the server variables in `.env` before starting.
 
+## Overview and guided tour
+
+The overview uses the portraits in `src/assets/avatar-me` to look toward the cursor in eight directions. The orbital rings stay in place, with independently orbiting dots. A larger dot grid sits at the top right. Touch input keeps the portrait facing forward, and reduced motion disables orbit animations and crossfades.
+
+An automatic cursor tour starts when the intro loading screen finishes and the homepage opens. It points to the avatar, six social links, navigation links, selected projects, experience, toolkit, views, likes, and contact links while staying on the homepage. The cursor travels with a small Ernest name tag, then opens a black typewriter tooltip when it reaches each item. On mobile, the navigation menu opens when a sidebar item is being explained.
+
+Use Pause/Resume, Next/Back, the arrow keys, Skip tour, or Escape. Interacting with a page pauses the tour; clicking a navigation link yourself ends it and follows your chosen link. Switching browser tabs suspends the automatic timer. **Take the tour again** restarts it; refreshing or returning to Overview does not automatically repeat the tour. The tour never clicks links or changes browser history.
+
+Playground music belongs to a persistent app provider, so opening, restarting, or switching games keeps the same track playing at its current position. Returning to Playground lets you pause, change tracks, seek, or adjust the volume. Game sound effects have their own controls.
+
 ## Contact
 
 `/contact` contains the contact details and an email draft form. Name, email, and message are required; the selected topic becomes the subject. **Send message opens the visitor's email app with a draft**, which they must send themselves. No email delivery service is configured, and the form does not upload or store its fields. The copy button copies the public email address and reports clipboard failures.
 
-Social icons start monochrome and show their brand colors on hover or keyboard focus. GitHub and X remain their brand's dark colors. Add verified profile URLs to `socials` in `src/components/Contact/Contact.tsx`; entries without URLs are explicitly unavailable rather than pointing at guessed accounts. Keep the public contact facts in `server/portfolio-context.ts` in sync when details change.
+Social icons start monochrome and show their brand colors on hover or keyboard focus. GitHub and X remain their brand's dark colors. The overview and contact page share verified profile URLs from `src/lib/social-profiles.ts`. Keep the public contact facts in `server/portfolio-context.ts` in sync when details change.
 
 ## Typing test
 
@@ -126,4 +136,4 @@ Backend tests cover visit deduplication, separate visitors, like/unlike behavior
 
 ## Playground music
 
-The music icon opens a picker containing Sparkle, Zen Zen Zense, and Gurenge from `src/components/Playground/music/`. Select a track or use play/pause, previous/next, seek, and volume. The speaker icon toggles mute. Playback begins after a click, tracks advance automatically, and volume, mute, and track selection are remembered locally. Music stops when leaving Playground.
+The music icon opens a picker containing Sparkle, Zen Zen Zense, and Gurenge from `src/components/Playground/music/`. Select a track or use play/pause, previous/next, seek, and volume. The speaker icon toggles mute. Playback begins after a click, tracks advance automatically, and volume, mute, and track selection are remembered locally. The same audio continues playing across portfolio pages and games until paused in the player.
