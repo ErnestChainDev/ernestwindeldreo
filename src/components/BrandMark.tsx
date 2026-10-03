@@ -1,4 +1,4 @@
-import logo from "../assets/Logo.webp";
+import logo from "../assets/Logo-mark.webp";
 import "./BrandMark.css";
 
 export default function BrandMark({ className = "" }: { className?: string }) {
@@ -8,4 +8,3 @@ export default function BrandMark({ className = "" }: { className?: string }) {
         </span>
     );
 }
-

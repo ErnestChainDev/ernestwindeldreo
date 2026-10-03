@@ -6,17 +6,18 @@ import PlaygroundMusicProvider from "./Playground/PlaygroundMusicProvider";
 
 const HomeTour = lazy(() => import("./HomeTour"));
 
-export default function PortfolioApp({ stats, startTour }: { stats: SiteStats; startTour: boolean }) {
+export default function PortfolioApp({ stats, startTour, onTourClose }: { stats: SiteStats; startTour: boolean; onTourClose: () => void }) {
     const [tourActive, setTourActive] = useState(startTour);
     const [hasToured, setHasToured] = useState(false);
     const handleStartTour = useCallback(() => setTourActive(true), []);
     const handleCloseTour = useCallback(() => {
         setTourActive(false);
         setHasToured(true);
+        onTourClose();
         if (window.location.pathname === "/") {
             requestAnimationFrame(() => document.querySelector<HTMLButtonElement>(".home-tour-trigger")?.focus({ preventScroll: true }));
         }
-    }, []);
+    }, [onTourClose]);
 
     return (
         <PlaygroundMusicProvider>

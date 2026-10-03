@@ -80,6 +80,7 @@
 }
 
 .home-shell.home-shell--snake,
+.home-shell.home-shell--workspace,
 .home-shell.home-shell--assistant,
 .home-shell.home-shell--space-dash,
 .home-shell.home-shell--tower-stack,
@@ -87,6 +88,8 @@
 .home-shell.home-shell--typing-test { inset: 0; height: 100dvh; border: 0; border-radius: 0; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
 .home-shell--snake > .home-sidebar,
 .home-shell--snake > .home-mobile-header,
+.home-shell--workspace > .home-sidebar,
+.home-shell--workspace > .home-mobile-header,
 .home-shell--assistant > .home-sidebar,
 .home-shell--assistant > .home-mobile-header,
 .home-shell--space-dash > .home-sidebar,

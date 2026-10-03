@@ -1,5 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { ArrowRight, ArrowUpRight, Award, BriefcaseBusiness, ChevronRight, Folder, Gamepad2, Heart, House, Keyboard, Layers, MessageSquare, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Award, BriefcaseBusiness, ChevronRight, Folder, Gamepad2, Heart, House, Keyboard, Layers, MessageSquare, PanelsTopLeft, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import BrandMark from "./BrandMark";
 import ArrowNarrowRightIcon from "./ui/arrow-narrow-right-icon";
@@ -144,6 +144,17 @@ export default function Sidebar({ stats, variant = "desktop", onClose }: Sidebar
         </a>
     );
 
+    const workspaceLink = (
+        <a
+            href="/workspace" data-tour="nav-workspace" className={`home-nav-link home-workspace${activePage === "/workspace" ? " is-active" : ""}`}
+            aria-current={activePage === "/workspace" ? "page" : undefined} title="Workspace"
+        >
+            <PanelsTopLeft aria-hidden="true" />
+            <span>Workspace</span>
+            <NavigationArrow active={activePage === "/workspace"} />
+        </a>
+    );
+
     return (
         <aside className={`home-sidebar${mobile ? " home-sidebar-mobile" : ""}`} aria-label="Portfolio sidebar">
             <div className="home-sidebar-heading">
@@ -196,7 +207,7 @@ export default function Sidebar({ stats, variant = "desktop", onClose }: Sidebar
                 </div>
             </nav>
 
-            {mobile && playgroundLink}
+            {mobile && <>{playgroundLink}{workspaceLink}</>}
 
             <div className="home-community" data-tour="community">
                 <CommunityAvatars />
@@ -216,7 +227,7 @@ export default function Sidebar({ stats, variant = "desktop", onClose }: Sidebar
                 {error && <button className="home-stats-retry" type="button" onClick={retry} title={error}>Stats unavailable · Retry</button>}
             </div>
 
-            {!mobile && playgroundLink}
+            {!mobile && <>{playgroundLink}{workspaceLink}</>}
 
             <footer className="home-sidebar-footer">
                 <p className="home-contact-eyebrow">Have a project in mind?</p>

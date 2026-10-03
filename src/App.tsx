@@ -2,9 +2,11 @@ import { lazy, Suspense, useCallback, useState } from "react";
 import LoadingScreen from "./components/LoadingScreen";
 import IntroPage from "./pages/IntroPage";
 import { useSiteStats } from "./hooks/useSiteStats";
+import { usePathname } from "./lib/navigation";
 
 const loadPortfolio = () => import("./components/PortfolioApp");
 const PortfolioApp = lazy(loadPortfolio);
+const Workspace = lazy(() => import("./components/Workspace/Workspace"));
 
 type Screen = "intro" | "loading" | "home";
 
@@ -22,9 +24,11 @@ function getInitialScreen(): Screen {
 }
 
 export default function App() {
+  const pathname = usePathname();
   const stats = useSiteStats();
   const [screen, setScreen] = useState<Screen>(getInitialScreen);
   const [tourActive, setTourActive] = useState(false);
+  const handleTourClose = useCallback(() => setTourActive(false), []);
 
   const handleEnter = useCallback(() => {
     // Fetch the portfolio while its existing opening animation plays.
@@ -54,7 +58,7 @@ export default function App() {
 
   return (
     <Suspense fallback={<main className="loading-screen"><p role="status">Opening portfolio…</p></main>}>
-      <PortfolioApp stats={stats} startTour={tourActive} />
+      {pathname.split("/")[1] === "workspace" ? <Workspace /> : <PortfolioApp stats={stats} startTour={tourActive} onTourClose={handleTourClose} />}
     </Suspense>
   );
 }

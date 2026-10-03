@@ -82,10 +82,12 @@
     .home-sidebar-mobile .home-nav-link.is-active svg { color: #30323d; }
     .home-sidebar-mobile .home-nav-link:hover { background: #eeeef1; }
     .home-sidebar-mobile .home-nav-tools .home-nav-link,
-    .home-sidebar-mobile .home-playground { color: #383b4c; }
+    .home-sidebar-mobile .home-playground,
+    .home-sidebar-mobile .home-workspace { color: #383b4c; }
     .home-sidebar-mobile .home-tool-icon { display: block; }
     .home-sidebar-mobile .home-shortcut { display: none; }
-    .home-sidebar-mobile .home-playground { margin: 4px calc(var(--mobile-inline) - 8px) 0; }
+    .home-sidebar-mobile .home-playground,
+    .home-sidebar-mobile .home-workspace { margin: 4px calc(var(--mobile-inline) - 8px) 0; }
 
     .home-sidebar-mobile .home-community { gap: 8px 12px; margin: 36px var(--mobile-inline) 0; }
     .home-sidebar-mobile .home-visitors { min-height: 40px; }

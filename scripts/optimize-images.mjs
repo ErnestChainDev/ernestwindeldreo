@@ -17,4 +17,5 @@ for (const name of await readdir(directory, { recursive: true })) {
   count++;
 }
 await sharp(path.join(directory, 'Logo.png')).resize({ width: 512 }).webp({ quality: 82, effort: 6 }).toFile(path.join(directory, 'Logo-small.webp'));
+await sharp(path.join(directory, 'Logo.png')).resize({ width: 224 }).webp({ quality: 90, effort: 6 }).toFile(path.join(directory, 'Logo-mark.webp'));
 console.log(JSON.stringify({ count, originalBytes: before, optimizedBytes: after, reduction: `${Math.round((1 - after / before) * 100)}%` }));

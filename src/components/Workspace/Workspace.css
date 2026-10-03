@@ -1,0 +1,91 @@
+.workspace-page {
+    --workspace-muted: #696b75;
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-width: 0;
+    min-height: 100%;
+    overflow-y: auto;
+    background: #f9f9fa;
+}
+
+.home-shell--workspace .portfolio-content > main { animation: none; }
+
+.workspace-page::before,
+.workspace-page::after {
+    position: absolute;
+    z-index: -1;
+    width: 180px;
+    height: 170px;
+    background: radial-gradient(circle, #cdd0d7 1px, transparent 1.5px) 0 0 / 18px 18px;
+    pointer-events: none;
+    content: "";
+}
+
+.workspace-page::before { top: 96px; right: 0; mask-image: linear-gradient(to bottom, #000, transparent); }
+.workspace-page::after { bottom: 88px; left: 0; mask-image: linear-gradient(to top, #000, transparent); }
+
+.workspace-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px clamp(24px, 3.35vw, 64px);
+}
+
+.workspace-brand { display: flex; align-items: center; gap: 26px; }
+.workspace-brand .home-logo-crop { width: 60px; }
+.workspace-brand-copy { padding-left: 26px; border-left: 1px solid #cdd0d7; }
+.workspace-brand-copy > span { display: block; font-size: 19px; font-weight: 550; line-height: 1.3; }
+.workspace-brand-copy small { display: block; margin-top: 3px; color: var(--workspace-muted); font-size: 15px; line-height: 1.3; }
+.workspace-back { display: inline-flex; align-items: center; gap: 16px; min-height: 44px; font-size: 15px; }
+.workspace-back svg, .workspace-overview svg { width: 24px; height: 24px; stroke-width: 1.8; flex-shrink: 0; }
+
+.workspace-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    padding: 40px 24px;
+    text-align: center;
+}
+
+.workspace-cone { display: grid; place-items: center; width: 132px; height: 132px; margin-bottom: 26px; border: 2px dotted #cdd0d7; border-radius: 50%; }
+.workspace-cone svg { width: 76px; height: 76px; }
+.workspace-status { display: inline-flex; align-items: center; gap: 9px; min-height: 36px; padding: 7px 17px; border: 1px solid #e0e1e6; border-radius: 999px; color: var(--workspace-muted); font-size: 13px; line-height: 20px; }
+.workspace-status > span { width: 11px; height: 11px; border-radius: 50%; background: #85868d; }
+.workspace-content .workspace-eyebrow { margin-top: 28px; color: var(--workspace-muted); font-size: 13px; line-height: 18px; letter-spacing: 0.3em; text-transform: uppercase; }
+.workspace-content h1 { margin-top: 24px; font-size: clamp(40px, 4.65vw, 76px); font-weight: 750; line-height: 1.08; letter-spacing: -0.045em; outline: none; }
+.workspace-content .workspace-subtitle { margin-top: 12px; color: var(--workspace-muted); font-size: clamp(20px, 1.8vw, 29px); line-height: 1.4; letter-spacing: -0.025em; }
+.workspace-content .workspace-description { max-width: 660px; margin-top: 24px; color: var(--workspace-muted); font-size: 18px; line-height: 1.5; }
+.home-shell .workspace-overview { display: inline-flex; align-items: center; justify-content: center; gap: 16px; min-height: 54px; margin-top: 40px; padding: 12px 30px; border-radius: 10px; background: #111; color: #fff; font-size: 18px; font-weight: 500; line-height: 1.5; transition: background 160ms ease; }
+.home-shell .workspace-overview:hover { background: #303033; }
+.workspace-back:hover { text-decoration: underline; text-underline-offset: 4px; }
+.workspace-footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 28px clamp(24px, 3.35vw, 64px) 40px; color: var(--workspace-muted); font-size: 14px; line-height: 1.5; }
+
+@media (max-width: 600px) {
+    .workspace-header { align-items: flex-start; gap: 20px; padding: max(20px, env(safe-area-inset-top)) 20px 20px; }
+    .workspace-brand { gap: 12px; }
+    .workspace-brand .home-logo-crop { width: 38px; }
+    .workspace-brand-copy { padding-left: 12px; }
+    .workspace-brand-copy > span { max-width: 130px; font-size: 14px; }
+    .workspace-brand-copy small { font-size: 12px; }
+    .workspace-back { gap: 6px; font-size: 12px; }
+    .workspace-back svg { width: 20px; height: 20px; }
+    .workspace-back > span { max-width: 70px; }
+    .workspace-content { padding: 32px 20px; }
+    .workspace-cone { width: 108px; height: 108px; margin-bottom: 22px; }
+    .workspace-cone svg { width: 64px; height: 64px; }
+    .workspace-content h1 { font-size: clamp(36px, 9vw, 48px); }
+    .workspace-content .workspace-subtitle { max-width: 320px; font-size: 20px; }
+    .workspace-content .workspace-description { max-width: 340px; margin-top: 20px; font-size: 16px; }
+    .home-shell .workspace-overview { margin-top: 30px; font-size: 16px; }
+    .workspace-footer { align-items: flex-start; padding: 24px 20px max(24px, env(safe-area-inset-bottom)); font-size: 12px; }
+    .workspace-footer > span:last-child { max-width: 130px; text-align: right; }
+    .workspace-page::before, .workspace-page::after { width: 100px; opacity: 0.6; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .workspace-overview { transition: none; }
+}
