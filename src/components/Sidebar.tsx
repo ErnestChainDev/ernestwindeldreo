@@ -207,7 +207,7 @@ export default function Sidebar({ stats, variant = "desktop", onClose }: Sidebar
                     aria-label={counts?.liked ? "Unlike this portfolio" : "Like this portfolio"}
                     title={counts?.liked ? "Unlike this portfolio" : "Like this portfolio"}
                 >
-                    <Heart aria-hidden="true" fill="currentColor" />
+                    <Heart aria-hidden="true" fill={counts?.liked ? "currentColor" : "none"} />
                     <span aria-live="polite" aria-atomic="true">{formatCount(counts?.likes)} {counts?.likes === 1 ? "like" : "likes"}</span>
                 </button>
                 <span className="home-view-count" data-tour="views" aria-live="polite" aria-atomic="true" title="One view per browser-tab visit; refreshing does not add a view.">

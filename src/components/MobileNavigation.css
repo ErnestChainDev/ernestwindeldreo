@@ -91,9 +91,9 @@
     .home-sidebar-mobile .home-visitors { min-height: 40px; }
     .home-sidebar-mobile .home-avatar { width: 40px; height: 40px; background: #eeeef0; }
     .home-sidebar-mobile .home-avatar-group > [data-slot="avatar-container"] + [data-slot="avatar-container"] { margin-left: -7px; }
-    .home-sidebar-mobile .home-like-button { gap: 9px; min-height: 44px; color: #777781; font-size: 14px; }
-    .home-sidebar-mobile .home-like-button svg { width: 23px; height: 23px; color: #f06087; }
-    .home-sidebar-mobile .home-like-button[aria-pressed="true"] svg { color: #dc3f70; }
+    .home-sidebar-mobile .home-like-button { gap: 9px; min-height: 44px; color: #6b7280; font-size: 14px; }
+    .home-sidebar-mobile .home-like-button svg { width: 23px; height: 23px; color: inherit; }
+    .home-sidebar-mobile .home-like-button[aria-pressed="true"] { color: #dc2626; }
     .home-sidebar-mobile .home-view-count { font-size: 14px; }
     .home-sidebar-mobile .home-view-count strong { margin: 0; color: inherit; font-weight: 400; }
     .home-sidebar-mobile .home-stats-retry { font-size: 12px; }

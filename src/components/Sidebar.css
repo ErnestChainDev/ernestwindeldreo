@@ -74,10 +74,10 @@
 .home-view-count { grid-column: 1 / -1; color: var(--sidebar-muted); font-size: calc(0.95 * var(--home-unit)); line-height: 1.5; }
 .home-view-count strong { margin-right: calc(0.2 * var(--home-unit)); color: var(--home-ink); font-weight: 450; font-variant-numeric: tabular-nums; }
 
-.home-like-button { display: inline-flex; align-items: center; justify-self: end; gap: calc(0.65 * var(--home-unit)); padding: 0; border: 0; background: transparent; color: #bb3b69; font: inherit; font-size: calc(0.95 * var(--home-unit)); white-space: nowrap; cursor: pointer; }
+.home-like-button { display: inline-flex; align-items: center; justify-self: end; gap: calc(0.65 * var(--home-unit)); padding: 0; border: 0; background: transparent; color: #6b7280; font: inherit; font-size: calc(0.95 * var(--home-unit)); white-space: nowrap; cursor: pointer; }
 .home-like-button svg { width: calc(1.5 * var(--home-unit)); height: calc(1.5 * var(--home-unit)); stroke-width: 1.4; transition: transform 180ms ease; }
 .home-like-button:hover:not(:disabled) svg { transform: scale(1.12); }
-.home-like-button[aria-pressed="true"] { color: #a92a59; }
+.home-like-button[aria-pressed="true"] { color: #dc2626; }
 .home-like-button:disabled { cursor: default; opacity: 0.55; }
 .home-like-button:focus-visible, .home-stats-retry:focus-visible { outline: 2px solid var(--sidebar-muted); outline-offset: 4px; border-radius: 4px; }
 .home-stats-retry { grid-column: 1 / -1; justify-self: start; padding: 0; border: 0; background: transparent; color: var(--sidebar-muted); font: inherit; font-size: calc(0.75 * var(--home-unit)); cursor: pointer; }
