@@ -3,10 +3,11 @@
     position: relative;
     isolation: isolate;
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     min-width: 0;
-    min-height: 100%;
-    overflow-y: auto;
+    min-height: 0;
+    height: 100%;
+    overflow: clip;
     background: #f9f9fa;
 }
 
@@ -84,6 +85,62 @@
     .workspace-footer { align-items: flex-start; padding: 24px 20px max(24px, env(safe-area-inset-bottom)); font-size: 12px; }
     .workspace-footer > span:last-child { max-width: 130px; text-align: right; }
     .workspace-page::before, .workspace-page::after { width: 100px; opacity: 0.6; }
+}
+
+/* Keep the full page visible as mobile browser controls or landscape reduce its height. */
+@media (max-height: 800px) {
+    .workspace-header { padding-top: max(16px, env(safe-area-inset-top)); padding-bottom: 16px; }
+    .workspace-content { padding-top: 16px; padding-bottom: 16px; }
+    .workspace-cone { width: 96px; height: 96px; margin-bottom: 16px; }
+    .workspace-cone svg { width: 60px; height: 60px; }
+    .workspace-content .workspace-eyebrow { margin-top: 20px; }
+    .workspace-content h1 { margin-top: 16px; }
+    .workspace-content .workspace-subtitle { margin-top: 8px; }
+    .workspace-content .workspace-description { margin-top: 16px; }
+    .home-shell .workspace-overview { min-height: 48px; margin-top: 24px; padding: 10px 24px; }
+    .workspace-footer { padding-top: 18px; padding-bottom: max(20px, env(safe-area-inset-bottom)); }
+}
+
+@media (max-height: 650px) {
+    .workspace-header { padding-top: max(10px, env(safe-area-inset-top)); padding-bottom: 10px; }
+    .workspace-content { padding-top: 8px; padding-bottom: 8px; }
+    .workspace-cone { width: 64px; height: 64px; margin-bottom: 12px; }
+    .workspace-cone svg { width: 40px; height: 40px; }
+    .workspace-status { min-height: 30px; padding: 4px 14px; }
+    .workspace-content .workspace-eyebrow { margin-top: 14px; }
+    .workspace-content h1 { margin-top: 12px; font-size: clamp(30px, 8.5vw, 44px); }
+    .workspace-content .workspace-subtitle { font-size: 18px; }
+    .workspace-content .workspace-description { margin-top: 12px; font-size: 14px; }
+    .home-shell .workspace-overview { min-height: 44px; margin-top: 18px; font-size: 16px; }
+    .workspace-footer { padding-top: 10px; padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+}
+
+@media (max-height: 500px) {
+    .workspace-header { padding-top: max(6px, env(safe-area-inset-top)); padding-bottom: 6px; }
+    .workspace-content { padding-top: 2px; padding-bottom: 2px; }
+    .workspace-cone { width: 40px; height: 40px; margin-bottom: 8px; }
+    .workspace-cone svg { width: 28px; height: 28px; }
+    .workspace-status { min-height: 28px; padding: 3px 14px; }
+    .workspace-content .workspace-eyebrow { margin-top: 8px; font-size: 11px; line-height: 16px; }
+    .workspace-content h1 { margin-top: 8px; font-size: clamp(28px, 7vw, 36px); }
+    .workspace-content .workspace-subtitle { margin-top: 6px; font-size: 16px; }
+    .workspace-content .workspace-description { max-width: none; margin-top: 8px; }
+    .home-shell .workspace-overview { margin-top: 12px; }
+    .workspace-footer { padding-top: 8px; padding-bottom: max(8px, env(safe-area-inset-bottom)); font-size: 12px; }
+    .workspace-footer > span:last-child { max-width: none; }
+}
+
+@media (max-height: 360px) and (min-width: 480px) {
+    .workspace-content { display: grid; grid-template-columns: 160px minmax(0, 1fr); column-gap: 16px; width: min(100%, 760px); justify-self: center; }
+    .workspace-content > * { justify-self: center; }
+    .workspace-cone { grid-column: 1; grid-row: 1 / span 2; align-self: center; width: 64px; height: 64px; margin: 0; }
+    .workspace-cone svg { width: 40px; height: 40px; }
+    .workspace-status { grid-column: 1; grid-row: 3; align-self: center; }
+    .workspace-content .workspace-eyebrow { grid-column: 1; grid-row: 4; align-self: center; margin: 0; }
+    .workspace-content h1 { grid-column: 2; grid-row: 1; margin: 0; }
+    .workspace-content .workspace-subtitle { grid-column: 2; grid-row: 2; }
+    .workspace-content .workspace-description { grid-column: 2; grid-row: 3; }
+    .home-shell .workspace-overview { grid-column: 2; grid-row: 4; }
 }
 
 @media (prefers-reduced-motion: reduce) {
